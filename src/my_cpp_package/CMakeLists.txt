@@ -26,7 +26,9 @@ target_include_directories(my_cpp_node PUBLIC
 target_compile_features(my_cpp_node PUBLIC c_std_17 cxx_std_20)
 
 # 4. Vincular rclcpp y las interfaces del mensaje generado
-ament_target_dependencies(my_cpp_node rclcpp)
+# ament_target_dependencies() se eliminó en ROS 2 Lyrical (deprecada desde Kilted).
+# Ahora se enlaza directamente contra el target CMake moderno que exporta rclcpp.
+target_link_libraries(my_cpp_node rclcpp::rclcpp)
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 target_link_libraries(my_cpp_node "${cpp_typesupport_target}")

@@ -1,5 +1,11 @@
 # pixi environments
 .pixi/*
 !.pixi/config.toml
+
+# Editor
 .vscode
+
+# Artefactos generados por colcon (se regeneran con `pixi run build`)
 build/
+install/
+log/

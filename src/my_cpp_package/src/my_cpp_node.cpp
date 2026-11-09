@@ -3,8 +3,8 @@
 #include <chrono>
 #include "rclcpp/rclcpp.hpp"
 
-// Header generado automáticamente a partir de CoordenadaEspecial.msg
-#include "my_cpp_package/msg/my_position.hpp" 
+// Header generado automáticamente a partir de SpecialCoords.msg (CamelCase -> snake_case)
+#include "my_cpp_package/msg/special_coords.hpp" 
 #include "my_position.hpp"
 
 using namespace std::chrono_literals;
@@ -13,7 +13,7 @@ class NodoCoordenadas : public rclcpp::Node {
 public:
   NodoCoordenadas() : Node("nodo_coordenadas_custom"), pos_(0.0, 0.0, "Sensor_Principal") {
     // Publisher del tipo personalizado
-    publisher_ = this->create_publisher<mi_paquete::msg::CoordenadaEspecial>("topic_coordenadas", 10);
+    publisher_ = this->create_publisher<my_cpp_package::msg::SpecialCoords>("topic_coordenadas", 10);
 
     // Temporizador
     timer_ = this->create_wall_timer(
@@ -26,10 +26,10 @@ private:
     pos_.mover(0.5, 1.2);
 
     // 2. Instanciar y rellenar el mensaje de ROS 2
-    auto msg = mi_paquete::msg::CoordenadaEspecial();
+    auto msg = my_cpp_package::msg::SpecialCoords();
     msg.x = pos_.getX();
     msg.y = pos_.getY();
-    msg.etiqueta = pos_.getTag();
+    msg.tag = pos_.getTag();
 
     RCLCPP_INFO(this->get_logger(), "[%s] Posicion actual: x=%.2f, y=%.2f", 
                 msg.tag.c_str(), msg.x, msg.y);
@@ -38,8 +38,8 @@ private:
     publisher_->publish(msg);
   }
 
-  MiPosicion pos_; // Instancia de la clase C++ pura
-  rclcpp::Publisher<mi_paquete::msg::CoordenadaEspecial>::SharedPtr publisher_;
+  MyPosition pos_; // Instancia de la clase C++ pura
+  rclcpp::Publisher<my_cpp_package::msg::SpecialCoords>::SharedPtr publisher_;
   rclcpp::TimerBase::SharedPtr timer_;
 };
 

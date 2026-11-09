@@ -1,1 +1,0 @@
-/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/share/ament_cmake_core/cmake/environment_hooks/environment/path.sh
