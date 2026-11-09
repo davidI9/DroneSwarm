@@ -1,0 +1,55 @@
+[0.036s] Invoking command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake /home/david/code/prueba-ros/ros2-proy-prueba/src/my_cpp_package -G Ninja -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package
+[0.161s] -- The C compiler identification is GNU 15.3.0
+[0.317s] -- The CXX compiler identification is GNU 15.3.0
+[0.341s] -- Detecting C compiler ABI info
+[0.408s] -- Detecting C compiler ABI info - done
+[0.434s] -- Check for working C compiler: /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cc - skipped
+[0.435s] -- Detecting C compile features
+[0.435s] -- Detecting C compile features - done
+[0.460s] -- Detecting CXX compiler ABI info
+[0.547s] -- Detecting CXX compiler ABI info - done
+[0.569s] -- Check for working CXX compiler: /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/c++ - skipped
+[0.570s] -- Detecting CXX compile features
+[0.571s] -- Detecting CXX compile features - done
+[0.590s] -- Found ament_cmake: 2.8.8 (/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/share/ament_cmake/cmake)
+[0.799s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.901s] -- Found ament_lint_auto: 0.20.6 (/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/share/ament_lint_auto/cmake)
+[1.068s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.068s] -- Configured cppcheck include dirs: $<BUILD_INTERFACE:/home/david/code/prueba-ros/ros2-proy-prueba/src/my_cpp_package/include>
+[1.068s] -- Configured cppcheck exclude dirs and/or files: 
+[1.069s] -- Added test 'lint_cmake' to check CMake code style
+[1.074s] -- Added test 'uncrustify' to check C / C++ code style
+[1.074s] -- Configured uncrustify additional arguments: 
+[1.074s] -- Added test 'xmllint' to check XML markup files
+[1.074s] -- Configuring done (1.0s)
+[1.091s] -- Generating done (0.0s)
+[1.093s] -- Build files have been written to: /home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package
+[1.093s] Invoked command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package' returned '0': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake /home/david/code/prueba-ros/ros2-proy-prueba/src/my_cpp_package -G Ninja -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package
+[1.094s] Invoking command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake --build /home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package -- -j8 -l8
+[1.104s] 
+[1.133s] [0/2] Building CXX object CMakeFiles/my_cpp_node.dir/src/my_cpp_node.cpp.o[K
+[1.134s] [1/2] Building CXX object CMakeFiles/my_cpp_node.dir/src/my_cpp_node.cpp.o[K
+[1.181s] [1/2] Linking CXX executable my_cpp_node[K
+[1.181s] [2/2] Linking CXX executable my_cpp_node[K
+[1.184s] Invoked command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package' returned '0': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake --build /home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package -- -j8 -l8
+[1.193s] Invoking command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake --install /home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package
+[1.200s] -- Install configuration: ""
+[1.200s] -- Execute custom install script
+[1.200s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/lib/my_cpp_package/my_cpp_node
+[1.209s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/package_run_dependencies/my_cpp_package
+[1.219s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/parent_prefix_path/my_cpp_package
+[1.232s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/ament_prefix_path.sh
+[1.244s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/ament_prefix_path.dsv
+[1.256s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/path.sh
+[1.270s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/path.dsv
+[1.278s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.bash
+[1.285s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.fish
+[1.297s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.sh
+[1.304s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.zsh
+[1.314s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.dsv
+[1.323s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/package.dsv
+[1.332s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/packages/my_cpp_package
+[1.342s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/cmake/my_cpp_packageConfig.cmake
+[1.348s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/cmake/my_cpp_packageConfig-version.cmake
+[1.358s] -- Symlinking: /home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/package.xml
+[1.367s] Invoked command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package' returned '0': CMAKE_PREFIX_PATH=/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake --install /home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package

@@ -1,0 +1,54 @@
+{
+	"cmake" : 
+	{
+		"generator" : 
+		{
+			"multiConfig" : false,
+			"name" : "Ninja"
+		},
+		"paths" : 
+		{
+			"cmake" : "/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cmake",
+			"cpack" : "/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/cpack",
+			"ctest" : "/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/ctest",
+			"root" : "/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/share/cmake-3.31"
+		},
+		"version" : 
+		{
+			"isDirty" : false,
+			"major" : 3,
+			"minor" : 31,
+			"patch" : 8,
+			"string" : "3.31.8",
+			"suffix" : ""
+		}
+	},
+	"objects" : 
+	[
+		{
+			"jsonFile" : "codemodel-v2-bc09e84841ef725baab4.json",
+			"kind" : "codemodel",
+			"version" : 
+			{
+				"major" : 2,
+				"minor" : 7
+			}
+		}
+	],
+	"reply" : 
+	{
+		"client-colcon-cmake" : 
+		{
+			"codemodel-v2" : 
+			{
+				"jsonFile" : "codemodel-v2-bc09e84841ef725baab4.json",
+				"kind" : "codemodel",
+				"version" : 
+				{
+					"major" : 2,
+					"minor" : 7
+				}
+			}
+		}
+	}
+}

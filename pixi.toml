@@ -1,0 +1,24 @@
+[workspace]
+channels = ["robostack-lyrical", "conda-forge"]
+name = "ros2-proy-prueba"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+build = "colcon build --symlink-install"
+hello = "ros2 run my_package my_node"
+hello-cpp = "ros2 run my_cpp_package my_cpp_node"
+
+[dependencies]
+ros-lyrical-desktop = ">=0.13.0,<0.14"
+ros-lyrical-turtlesim = ">=1.10.9,<2"
+colcon-common-extensions = ">=0.3.0,<0.4"
+ros-lyrical-ament-cmake-auto = ">=2.8.8,<3"
+compilers = ">=2.0.0,<3"
+pkg-config = ">=0.29.2,<0.30"
+cmake = "<4"
+ninja = ">=1.13.2,<2"
+ros-lyrical-rviz2 = ">=15.2.6,<16"
+
+[activation]
+scripts = ["install/setup.sh"]

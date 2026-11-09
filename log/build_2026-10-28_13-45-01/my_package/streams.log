@@ -1,0 +1,19 @@
+[0.816s] Invoking command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_package': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) PYTHONPATH=/home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/prefix_override:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/lib/python3.14/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/lib/python3.14/site-packages:${PYTHONPATH} /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/python3.14 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/build --no-deps symlink_data --force
+[1.024s] running develop
+[1.140s] running egg_info
+[1.150s] writing my_package.egg-info/PKG-INFO
+[1.151s] writing dependency_links to my_package.egg-info/dependency_links.txt
+[1.151s] writing entry points to my_package.egg-info/entry_points.txt
+[1.151s] writing requirements to my_package.egg-info/requires.txt
+[1.151s] writing top-level names to my_package.egg-info/top_level.txt
+[1.170s] reading manifest file 'my_package.egg-info/SOURCES.txt'
+[1.173s] writing manifest file 'my_package.egg-info/SOURCES.txt'
+[1.197s] running build_ext
+[1.197s] Creating /home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/lib/python3.14/site-packages/my-package.egg-link (link to .)
+[1.205s] Installing my_node script to /home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/lib/my_package
+[1.207s] 
+[1.207s] Installed /home/david/code/prueba-ros/ros2-proy-prueba/build/my_package
+[1.208s] running symlink_data
+[1.208s] symbolically linking /home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/resource/my_package -> /home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/share/ament_index/resource_index/packages
+[1.208s] symbolically linking /home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/package.xml -> /home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/share/my_package
+[1.256s] Invoked command in '/home/david/code/prueba-ros/ros2-proy-prueba/build/my_package' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PIXI_PROMPT=(ros2-proy-prueba) PYTHONPATH=/home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/prefix_override:/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/lib/python3.14/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/david/code/prueba-ros/ros2-proy-prueba/install/my_package/lib/python3.14/site-packages:${PYTHONPATH} /home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/python3.14 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/david/code/prueba-ros/ros2-proy-prueba/build/my_package/build --no-deps symlink_data --force

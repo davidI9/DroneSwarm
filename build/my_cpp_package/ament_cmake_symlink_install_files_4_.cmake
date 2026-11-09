@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_files("/home/david/code/prueba-ros/ros2-proy-prueba/src/my_cpp_package" FILES "/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/share/ament_cmake_core/cmake/environment_hooks/environment/path.sh" "DESTINATION" "share/my_cpp_package/environment")

@@ -1,0 +1,1 @@
+/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package/ament_cmake_environment_hooks/local_setup.fish

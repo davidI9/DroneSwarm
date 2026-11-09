@@ -1,0 +1,17 @@
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/lib/my_cpp_package/my_cpp_node
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/package_run_dependencies/my_cpp_package
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/parent_prefix_path/my_cpp_package
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/ament_prefix_path.sh
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/ament_prefix_path.dsv
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/path.sh
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/environment/path.dsv
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.bash
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.fish
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.sh
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.zsh
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/local_setup.dsv
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/package.dsv
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/ament_index/resource_index/packages/my_cpp_package
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/cmake/my_cpp_packageConfig.cmake
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/cmake/my_cpp_packageConfig-version.cmake
+/home/david/code/prueba-ros/ros2-proy-prueba/install/my_cpp_package/share/my_cpp_package/package.xml
