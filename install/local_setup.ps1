@@ -12,7 +12,7 @@ if ($env:COLCON_PYTHON_EXECUTABLE) {
   $_colcon_python_executable="$env:COLCON_PYTHON_EXECUTABLE"
 } else {
   # use the Python executable known at configure time
-  $_colcon_python_executable="/home/david/code/prueba-ros/ros2-proy-prueba/.pixi/envs/default/bin/python3.14"
+  $_colcon_python_executable="/home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3.14"
   # if it doesn't exist try a fall back
   if (!(Test-Path "$_colcon_python_executable" -PathType Leaf)) {
     if (!(Get-Command "python3" -ErrorAction SilentlyContinue)) {

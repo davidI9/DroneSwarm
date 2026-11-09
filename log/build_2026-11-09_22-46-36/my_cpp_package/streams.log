@@ -1,0 +1,36 @@
+[0.030s] Invoking command in '/home/david/Codigos/DroneSwarm/build/my_cpp_package': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/david/Codigos/DroneSwarm/install/my_package:/home/david/Codigos/DroneSwarm/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.archlinux.org PIXI_PROMPT=(ros2-proy-prueba) _=/usr/bin/env /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/cmake /home/david/Codigos/DroneSwarm/src/my_cpp_package -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/david/Codigos/DroneSwarm/install/my_cpp_package
+[0.376s] -- The C compiler identification is GNU 15.3.0
+[0.810s] -- The CXX compiler identification is GNU 15.3.0
+[0.840s] -- Detecting C compiler ABI info
+[1.093s] -- Detecting C compiler ABI info - done
+[1.153s] -- Check for working C compiler: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/cc - skipped
+[1.154s] -- Detecting C compile features
+[1.156s] -- Detecting C compile features - done
+[1.205s] -- Detecting CXX compiler ABI info
+[1.551s] -- Detecting CXX compiler ABI info - done
+[1.627s] -- Check for working CXX compiler: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/c++ - skipped
+[1.627s] -- Detecting CXX compile features
+[1.629s] -- Detecting CXX compile features - done
+[1.668s] -- Found ament_cmake: 2.8.8 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/ament_cmake/cmake)
+[2.433s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[2.605s] -- Found rclcpp: 32.0.3 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rclcpp/cmake)
+[2.812s] -- Found rosidl_generator_c: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_generator_c/cmake)
+[2.874s] -- Found rosidl_generator_cpp: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_generator_cpp/cmake)
+[2.965s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.045s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.390s] -- Found rmw_implementation_cmake: 7.10.2 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rmw_implementation_cmake/cmake)
+[3.408s] -- Found rmw_fastrtps_cpp: 9.4.10 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rmw_fastrtps_cpp/cmake)
+[3.583s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[3.963s] -- Found rosidl_default_generators: 1.8.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_default_generators/cmake)
+[4.035s] -- Found rosidl_adapter: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_adapter/cmake)
+[4.478s] -- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter
+[6.282s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[6.675s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[7.691s] -- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter Development NumPy Development.Module Development.Embed
+[7.815s] -- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter
+[7.819s] [31mCMake Error at CMakeLists.txt:28 (ament_target_dependencies):
+[7.819s]   Unknown CMake command "ament_target_dependencies".
+[7.820s] 
+[7.820s] [0m
+[7.820s] -- Configuring incomplete, errors occurred!
+[7.843s] Invoked command in '/home/david/Codigos/DroneSwarm/build/my_cpp_package' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/david/Codigos/DroneSwarm/install/my_package:/home/david/Codigos/DroneSwarm/.pixi/envs/default DEBUGINFOD_URLS=https://debuginfod.archlinux.org PIXI_PROMPT=(ros2-proy-prueba) _=/usr/bin/env /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/cmake /home/david/Codigos/DroneSwarm/src/my_cpp_package -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/david/Codigos/DroneSwarm/install/my_cpp_package

@@ -1,0 +1,120 @@
+[0.000000] (-) TimerEvent: {}
+[0.000545] (my_cpp_package) JobQueued: {'identifier': 'my_cpp_package', 'dependencies': OrderedDict()}
+[0.000732] (my_cpp_package) JobStarted: {'identifier': 'my_cpp_package'}
+[0.024402] (my_cpp_package) JobProgress: {'identifier': 'my_cpp_package', 'progress': 'cmake'}
+[0.026009] (my_cpp_package) Command: {'cmd': ['/home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/cmake', '/home/david/Codigos/DroneSwarm/src/my_cpp_package', '-DAMENT_CMAKE_SYMLINK_INSTALL=1', '-DCMAKE_INSTALL_PREFIX=/home/david/Codigos/DroneSwarm/install/my_cpp_package'], 'cwd': '/home/david/Codigos/DroneSwarm/build/my_cpp_package', 'env': OrderedDict({'SHELL': '/usr/bin/bash', 'ROS_VERSION': '2', 'LSCOLORS': 'Gxfxcxdxdxegedabagacad', 'COLORTERM': 'truecolor', 'HYPRLAND_CMD': 'Hyprland --watchdog-fd 4', 'LESS': '-R', 'XDG_SESSION_PATH': '/org/freedesktop/DisplayManager/Session1', 'TERM_PROGRAM_VERSION': '1.131.0', 'COPILOT_DEBUG_NONCE': '5d297f18224c1c87837372c81316a32d', 'XDG_BACKEND': 'wayland', 'ROS_PYTHON_VERSION': '3', 'HISTSIZE': '2147450879', 'VSSCRIPT_PATH': '/usr/lib/python3.14/site-packages/vapoursynth/libvsscript.so', 'PIXI_WORKSPACE_MANIFEST': '/home/david/Codigos/DroneSwarm/pixi.toml', 'PIXI_PROMPT': '(ros2-proy-prueba)', 'ROS_OS_OVERRIDE': 'conda:linux', 'DESKTOP_SESSION': 'hyprland', 'HL_INITIAL_WORKSPACE_TOKEN': '611aa343-3717-4889-b92e-7685950f7407', 'OSH': '/home/david/.oh-my-bash', 'NO_AT_BRIDGE': '1', 'XCURSOR_SIZE': '16', 'XML_CATALOG_FILES': 'file:///home/david/Codigos/DroneSwarm/.pixi/envs/default/etc/xml/catalog file:///etc/xml/catalog', 'EDITOR': 'nano', 'BUN_INSPECT_CONNECT_TO': 'unix:///tmp/5f96yhg91zj.sock', 'XDG_SEAT': 'seat0', 'PWD': '/home/david/Codigos/DroneSwarm/build/my_cpp_package', 'GSETTINGS_SCHEMA_DIR': '/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/glib-2.0/schemas', 'XDG_SESSION_DESKTOP': 'Hyprland', 'LOGNAME': 'david', 'QT_QPA_PLATFORMTHEME': 'qt6ct', 'XDG_SESSION_TYPE': 'wayland', 'CONDA_PREFIX': '/home/david/Codigos/DroneSwarm/.pixi/envs/default', 'PNPM_HOME': '/home/david/.local/share/pnpm', 'GSETTINGS_SCHEMA_DIR_CONDA_BACKUP': '', 'PIXI_PROJECT_MANIFEST': '/home/david/Codigos/DroneSwarm/pixi.toml', 'PIXI_PROJECT_NAME': 'ros2-proy-prueba', 'VSCODE_GIT_ASKPASS_NODE': '/usr/share/code/code', 'MOTD_SHOWN': 'pam', 'HOME': '/home/david', 'LANG': 'es_ES.UTF-8', 'ROS_ETC_DIR': '/home/david/Codigos/DroneSwarm/.pixi/envs/default/etc/ros', '_JAVA_AWT_WM_NONREPARENTING': '1', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.7z=01;31:*.ace=01;31:*.alz=01;31:*.apk=01;31:*.arc=01;31:*.arj=01;31:*.bz=01;31:*.bz2=01;31:*.cab=01;31:*.cpio=01;31:*.crate=01;31:*.deb=01;31:*.drpm=01;31:*.dwm=01;31:*.dz=01;31:*.ear=01;31:*.egg=01;31:*.esd=01;31:*.gz=01;31:*.jar=01;31:*.lha=01;31:*.lrz=01;31:*.lz=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.lzo=01;31:*.pyz=01;31:*.rar=01;31:*.rpm=01;31:*.rz=01;31:*.sar=01;31:*.swm=01;31:*.t7z=01;31:*.tar=01;31:*.taz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tgz=01;31:*.tlz=01;31:*.txz=01;31:*.tz=01;31:*.tzo=01;31:*.tzst=01;31:*.udeb=01;31:*.war=01;31:*.whl=01;31:*.wim=01;31:*.xz=01;31:*.z=01;31:*.zip=01;31:*.zoo=01;31:*.zst=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.jxl=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:', 'XDG_CURRENT_DESKTOP': 'Hyprland', 'PYTHONSTARTUP': '/home/david/.config/Code/User/workspaceStorage/9699954fbca1251ca69dfaab62bf9d1f/ms-python.python/pythonrc.py', 'STARSHIP_SHELL': 'fish', 'WAYLAND_DISPLAY': 'wayland-1', 'PIXI_ENVIRONMENT_NAME': 'default', 'AMENT_PREFIX_PATH': '/home/david/Codigos/DroneSwarm/install/my_package:/home/david/Codigos/DroneSwarm/.pixi/envs/default', 'GIT_ASKPASS': '/usr/share/code/resources/app/extensions/git/dist/askpass.sh', 'CMAKE_PREFIX_PATH': '/home/david/Codigos/DroneSwarm/install/my_cpp_package:/home/david/Codigos/DroneSwarm/install/my_package:/home/david/Codigos/DroneSwarm/.pixi/envs/default', 'XDG_SEAT_PATH': '/org/freedesktop/DisplayManager/Seat0', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'COLCON_PREFIX_PATH': '/home/david/Codigos/DroneSwarm/install', 'PIXI_IN_SHELL': '1', 'INIT_CWD': '/home/david/Codigos/DroneSwarm', 'CHROME_DESKTOP': 'code.desktop', 'STARSHIP_SESSION_KEY': '1895460932788378', 'PIXI_WORKSPACE_NAME': 'ros2-proy-prueba', 'PIXI_WORKSPACE_VERSION': '0.1.0', 'NVM_DIR': '/home/david/.nvm', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'VSCODE_PYTHON_AUTOACTIVATE_GUARD': '1', 'XDG_SESSION_CLASS': 'user', 'PIXI_EXE': '/usr/bin/pixi', 'PYTHONPATH': '/home/david/Codigos/DroneSwarm/install/my_package/lib/python3.14/site-packages:/home/david/Codigos/DroneSwarm/.pixi/envs/default/lib/python/site-packages:/home/david/Codigos/DroneSwarm/.pixi/envs/default/lib/python3.14/site-packages', 'COLCON': '1', 'TERM': 'xterm-256color', 'USER': 'david', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1000/vscode-git-761447c873.sock', 'CONDA_SHLVL': '1', 'PIXI_WORKSPACE_ROOT': '/home/david/Codigos/DroneSwarm', 'HYPRLAND_INSTANCE_SIGNATURE': 'acc1aa0bfd4bd575dcb0f76c35ccf12b660a1ab9_1794250524_278417685', 'DISPLAY': ':1', 'SHLVL': '3', 'NVM_CD_FLAGS': '', 'MOZ_ENABLE_WAYLAND': '1', 'PAGER': 'less', 'PIXI_PROJECT_VERSION': '0.1.0', 'XDG_VTNR': '1', 'XDG_SESSION_ID': '2', 'PROJ_DATA': '/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/proj', 'PT8HOME': '/opt/pt', 'PIXI_PROJECT_ROOT': '/home/david/Codigos/DroneSwarm', 'FC_FONTATIONS': '1', 'LD_LIBRARY_PATH': '/home/david/Codigos/DroneSwarm/.pixi/envs/default/opt/rviz_ogre_vendor/lib', 'LC_CTYPE': 'es_ES.UTF-8', 'XDG_RUNTIME_DIR': '/run/user/1000', 'CONDA_DEFAULT_ENV': 'ros2-proy-prueba', 'PIXI_ENVIRONMENT_PLATFORMS': 'linux-64', 'DEBUGINFOD_URLS': 'https://debuginfod.archlinux.org', 'VSCODE_GIT_ASKPASS_MAIN': '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js', 'QT_AUTO_SCREEN_SCALE_FACTOR': '0', 'GDK_BACKEND': 'wayland', 'PATH': '/home/david/Codigos/DroneSwarm/.pixi/envs/default/bin:/home/david/.local/bin:/home/david/.local/bin:/home/david/.local/bin:/home/david/.local/bin:/home/david/.config/Code/User/globalStorage/github.copilot-chat/debugCommand:/home/david/.config/Code/User/globalStorage/github.copilot-chat/copilotCli:/home/david/.local/bin:/home/david/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/david/.local/share/pnpm/bin:/home/david/.spicetify:/home/david/.spicetify', 'HISTFILESIZE': '2147450879', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'MAIL': '/var/spool/mail/david', 'QT_SCALE_FACTOR': '1', 'ROS_DISTRO': 'lyrical', 'PROJ_NETWORK': 'ON', 'HYPRCURSOR_SIZE': '16', 'TERM_PROGRAM': 'vscode', '_': '/usr/bin/env'}), 'shell': False}
+[0.100022] (-) TimerEvent: {}
+[0.200346] (-) TimerEvent: {}
+[0.300721] (-) TimerEvent: {}
+[0.376288] (my_cpp_package) StdoutLine: {'line': b'-- The C compiler identification is GNU 15.3.0\n'}
+[0.400937] (-) TimerEvent: {}
+[0.501364] (-) TimerEvent: {}
+[0.601842] (-) TimerEvent: {}
+[0.702323] (-) TimerEvent: {}
+[0.802848] (-) TimerEvent: {}
+[0.810083] (my_cpp_package) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 15.3.0\n'}
+[0.840054] (my_cpp_package) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.903095] (-) TimerEvent: {}
+[1.003544] (-) TimerEvent: {}
+[1.093948] (my_cpp_package) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.103674] (-) TimerEvent: {}
+[1.153185] (my_cpp_package) StdoutLine: {'line': b'-- Check for working C compiler: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/cc - skipped\n'}
+[1.154256] (my_cpp_package) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.156257] (my_cpp_package) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.203878] (-) TimerEvent: {}
+[1.205201] (my_cpp_package) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[1.304080] (-) TimerEvent: {}
+[1.404511] (-) TimerEvent: {}
+[1.505034] (-) TimerEvent: {}
+[1.551929] (my_cpp_package) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[1.605182] (-) TimerEvent: {}
+[1.627252] (my_cpp_package) StdoutLine: {'line': b'-- Check for working CXX compiler: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/c++ - skipped\n'}
+[1.627983] (my_cpp_package) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[1.629714] (my_cpp_package) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[1.668865] (my_cpp_package) StdoutLine: {'line': b'-- Found ament_cmake: 2.8.8 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/ament_cmake/cmake)\n'}
+[1.705481] (-) TimerEvent: {}
+[1.805997] (-) TimerEvent: {}
+[1.906322] (-) TimerEvent: {}
+[2.006734] (-) TimerEvent: {}
+[2.107243] (-) TimerEvent: {}
+[2.207640] (-) TimerEvent: {}
+[2.308032] (-) TimerEvent: {}
+[2.408417] (-) TimerEvent: {}
+[2.433385] (my_cpp_package) StdoutLine: {'line': b'-- Override CMake install command with custom implementation using symlinks instead of copying resources\n'}
+[2.508584] (-) TimerEvent: {}
+[2.605948] (my_cpp_package) StdoutLine: {'line': b'-- Found rclcpp: 32.0.3 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rclcpp/cmake)\n'}
+[2.608691] (-) TimerEvent: {}
+[2.709076] (-) TimerEvent: {}
+[2.809545] (-) TimerEvent: {}
+[2.812377] (my_cpp_package) StdoutLine: {'line': b'-- Found rosidl_generator_c: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_generator_c/cmake)\n'}
+[2.874407] (my_cpp_package) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_generator_cpp/cmake)\n'}
+[2.909677] (-) TimerEvent: {}
+[2.965835] (my_cpp_package) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[3.009936] (-) TimerEvent: {}
+[3.045673] (my_cpp_package) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[3.110189] (-) TimerEvent: {}
+[3.210669] (-) TimerEvent: {}
+[3.311064] (-) TimerEvent: {}
+[3.390760] (my_cpp_package) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 7.10.2 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rmw_implementation_cmake/cmake)\n'}
+[3.408012] (my_cpp_package) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 9.4.10 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rmw_fastrtps_cpp/cmake)\n'}
+[3.411179] (-) TimerEvent: {}
+[3.511463] (-) TimerEvent: {}
+[3.583725] (my_cpp_package) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[3.611630] (-) TimerEvent: {}
+[3.712013] (-) TimerEvent: {}
+[3.812380] (-) TimerEvent: {}
+[3.912954] (-) TimerEvent: {}
+[3.963627] (my_cpp_package) StdoutLine: {'line': b'-- Found rosidl_default_generators: 1.8.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_default_generators/cmake)\n'}
+[4.013187] (-) TimerEvent: {}
+[4.035235] (my_cpp_package) StdoutLine: {'line': b'-- Found rosidl_adapter: 5.2.1 (/home/david/Codigos/DroneSwarm/.pixi/envs/default/share/rosidl_adapter/cmake)\n'}
+[4.113394] (-) TimerEvent: {}
+[4.214206] (-) TimerEvent: {}
+[4.314789] (-) TimerEvent: {}
+[4.415409] (-) TimerEvent: {}
+[4.478446] (my_cpp_package) StdoutLine: {'line': b'-- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter\n'}
+[4.515448] (-) TimerEvent: {}
+[4.615635] (-) TimerEvent: {}
+[4.716182] (-) TimerEvent: {}
+[4.816721] (-) TimerEvent: {}
+[4.917207] (-) TimerEvent: {}
+[5.017500] (-) TimerEvent: {}
+[5.117705] (-) TimerEvent: {}
+[5.217991] (-) TimerEvent: {}
+[5.318152] (-) TimerEvent: {}
+[5.418367] (-) TimerEvent: {}
+[5.518616] (-) TimerEvent: {}
+[5.618777] (-) TimerEvent: {}
+[5.718952] (-) TimerEvent: {}
+[5.819260] (-) TimerEvent: {}
+[5.919470] (-) TimerEvent: {}
+[6.019722] (-) TimerEvent: {}
+[6.120047] (-) TimerEvent: {}
+[6.220478] (-) TimerEvent: {}
+[6.283124] (my_cpp_package) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[6.320536] (-) TimerEvent: {}
+[6.421263] (-) TimerEvent: {}
+[6.521588] (-) TimerEvent: {}
+[6.621876] (-) TimerEvent: {}
+[6.675687] (my_cpp_package) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[6.721985] (-) TimerEvent: {}
+[6.822221] (-) TimerEvent: {}
+[6.922657] (-) TimerEvent: {}
+[7.023195] (-) TimerEvent: {}
+[7.123642] (-) TimerEvent: {}
+[7.223926] (-) TimerEvent: {}
+[7.324281] (-) TimerEvent: {}
+[7.424932] (-) TimerEvent: {}
+[7.525475] (-) TimerEvent: {}
+[7.625914] (-) TimerEvent: {}
+[7.691254] (my_cpp_package) StdoutLine: {'line': b'-- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter Development NumPy Development.Module Development.Embed\n'}
+[7.726052] (-) TimerEvent: {}
+[7.816065] (my_cpp_package) StdoutLine: {'line': b'-- Found Python3: /home/david/Codigos/DroneSwarm/.pixi/envs/default/bin/python3 (found version "3.14.10") found components: Interpreter\n'}
+[7.819686] (my_cpp_package) StderrLine: {'line': b'\x1b[31mCMake Error at CMakeLists.txt:28 (ament_target_dependencies):\n'}
+[7.820258] (my_cpp_package) StderrLine: {'line': b'  Unknown CMake command "ament_target_dependencies".\n'}
+[7.820450] (my_cpp_package) StderrLine: {'line': b'\n'}
+[7.820616] (my_cpp_package) StderrLine: {'line': b'\x1b[0m\n'}
+[7.820772] (my_cpp_package) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[7.826254] (-) TimerEvent: {}
+[7.842603] (my_cpp_package) CommandEnded: {'returncode': 1}
+[7.880479] (my_cpp_package) JobEnded: {'identifier': 'my_cpp_package', 'rc': 1}
+[7.881581] (-) EventReactorShutdown: {}

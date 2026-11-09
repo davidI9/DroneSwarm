@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_files("/home/david/code/prueba-ros/ros2-proy-prueba/src/my_cpp_package" FILES "/home/david/code/prueba-ros/ros2-proy-prueba/build/my_cpp_package/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/my_cpp_package" "DESTINATION" "share/ament_index/resource_index/package_run_dependencies")
