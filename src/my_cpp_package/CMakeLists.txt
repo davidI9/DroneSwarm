@@ -9,6 +9,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)   # <-- AÑADIR ESTA LÍNEA
 find_package(rclcpp REQUIRED)
+find_package(visualization_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 # 2. Generar las cabeceras C++ a partir de tu archivo .msg
@@ -19,16 +20,18 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 # 3. Declarar el ejecutable
 add_executable(my_cpp_node src/my_cpp_node.cpp)
 
-target_include_directories(my_cpp_node PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+# Cabeceras propias (drone.hpp, my_position.hpp) viven en src/
+target_include_directories(my_cpp_node PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 target_compile_features(my_cpp_node PUBLIC c_std_17 cxx_std_20)
 
 # 4. Vincular rclcpp y las interfaces del mensaje generado
 # ament_target_dependencies() se eliminó en ROS 2 Lyrical (deprecada desde Kilted).
 # Ahora se enlaza directamente contra el target CMake moderno que exporta rclcpp.
-target_link_libraries(my_cpp_node rclcpp::rclcpp)
+target_link_libraries(my_cpp_node
+  rclcpp::rclcpp
+  ${visualization_msgs_TARGETS})
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 target_link_libraries(my_cpp_node "${cpp_typesupport_target}")
@@ -44,4 +47,5 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+ament_export_dependencies(rosidl_default_runtime)
 ament_package()
