@@ -13,9 +13,9 @@ class Drone {
         Drone()
             : x_(0.0), y_(0.0), z_(0.0) {}
         void mover(double dx, double dy, double dz) {
-            x_ += dx;
-            y_ += dy;
-            z_ += dz;
+            x_ = dx;
+            y_ = dy;
+            z_ = dz;
         }
 
         double getX() const { return x_; }
