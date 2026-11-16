@@ -2,7 +2,7 @@ version: 7
 platforms:
 - name: linux-64
   virtual-packages:
-  - __unix=0=0
+  - __unix=0
   - __linux=4.18
   - __glibc=2.28
   - __archspec=0=x86_64
@@ -467,7 +467,6 @@ environments:
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-ament-cmake-auto-2.8.8-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-desktop-0.13.0-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-rviz2-15.2.6-hb0f4dca_30.conda
-      - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-turtlesim-1.10.9-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-msgs-2.4.5-np2py314h53a0733_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-tutorials-cpp-0.37.9-np2py314h53a0733_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-tutorials-py-0.37.9-np2py314h53a0733_30.conda
@@ -7522,14 +7521,6 @@ packages:
   - ros2-distro-mutex 0.22.* lyrical_*
   size: 2055
   timestamp: 1792763780576
-- conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-turtlesim-1.10.9-hb0f4dca_30.conda
-  sha256: fd11ce917bc605f78eb8fbe1a71d3c376e81571a87e636400a5da4aa972221be
-  md5: e26815e5039b8d5f68915f881ac8f0e0
-  depends:
-  - ros2-turtlesim ==1.10.9
-  - ros2-distro-mutex 0.22.* lyrical_*
-  size: 2062
-  timestamp: 1792759605907
 - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-msgs-2.4.5-np2py314h53a0733_30.conda
   sha256: aec1ad5f96541a9fe01b431abec4dab4ec86c3c70b1377f83415808524282537
   md5: 36d4dec7a21bd9a0c4401092c13edfc0

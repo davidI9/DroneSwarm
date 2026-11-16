@@ -6,12 +6,15 @@ version = "0.1.0"
 
 [tasks]
 build = "colcon build --symlink-install"
-hello = "ros2 run my_package my_node"
-hello-cpp = "ros2 run my_cpp_package my_cpp_node"
+test = { cmd = "colcon test --event-handlers console_direct+ && colcon test-result --verbose", depends-on = ["build"] }
+# pixi run drone 3
+# pixi run drone 3 "-p spawn_x:=1.0 -p spawn_y:=0.0 -p spawn_z:=1.0"
+drone = { cmd = "ros2 run swarm_drone drone --ros-args -p drone_id:={{ id }} {{ params }}", args = ["id", { arg = "params", default = "" }] }
+fake-hand = "ros2 run swarm_client fake_hand"
+rviz = "rviz2 -d src/swarm_client/config/swarm.rviz"
 
 [dependencies]
 ros-lyrical-desktop = ">=0.13.0,<0.14"
-ros-lyrical-turtlesim = ">=1.10.9,<2"
 colcon-common-extensions = ">=0.3.0,<0.4"
 ros-lyrical-ament-cmake-auto = ">=2.8.8,<3"
 compilers = ">=2.0.0,<3"
