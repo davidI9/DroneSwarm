@@ -2,7 +2,9 @@
 
 #include <array>
 #include <cstdint>
+#include <map>
 #include <optional>
+#include <vector>
 
 namespace swarm_drone
 {
@@ -33,6 +35,12 @@ struct DroneConfig
   DroneId drone_id = 0;
   // Sin valor, el spawn por defecto se deriva del drone_id.
   std::optional<Vec3> spawn;
+  // Tasa α del descenso de gradiente hacia el centroide.
+  double alpha = 0.5;
+  // Velocidad máxima: ningún paso supera v_max · dt.
+  double v_max_mps = 1.5;
+  // Distancia entre muestras al densificar el dominio Ω.
+  double sample_spacing_m = 0.02;
 };
 
 // Toda la lógica de un dron, sin dependencias de ROS. Los instantes son
@@ -51,7 +59,17 @@ public:
   const DroneState & state() const {return state_;}
 
 private:
+  Vec3 centroid_or_nearest_sample() const;
+  bool owns(const Vec3 & sample) const;
+
+  DroneConfig config_;
   DroneState state_;
+  // Vacío hasta que llega la primera mano; después se conserva la última.
+  std::vector<Vec3> domain_;
+  // Última posición conocida de cada vecino. Ordenado por id para que el
+  // recorrido sea determinista.
+  std::map<DroneId, Vec3> neighbors_;
+  std::optional<double> last_tick_s_;
 };
 
 }  // namespace swarm_drone

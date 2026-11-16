@@ -52,6 +52,15 @@ public:
     for (int i = 0; i < steps; ++i) {step();}
   }
 
+  std::vector<Vec3> positions() const
+  {
+    std::vector<Vec3> out;
+    for (const auto & drone : drones_) {out.push_back(drone->state().position);}
+    return out;
+  }
+
+  double tick_period_s() const {return tick_period_s_;}
+
   // Posición del primer dron con ese id.
   Vec3 position_of(DroneId id) const
   {
