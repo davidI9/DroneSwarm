@@ -9,13 +9,13 @@ Enjambre de drones simulados sobre ROS 2 / DDS que, sin coordinador central, rep
 
 ## Estado
 
-Hechos el esqueleto de extremo a extremo (issue #2), la cobertura CVT (issue #3), la capa de seguridad con ruptura de simetría (issue #4) y la tolerancia a fallos (issue #5). Hay tres paquetes en `src/`:
+Hechos el esqueleto de extremo a extremo (issue #2), la cobertura CVT (issue #3), la capa de seguridad con ruptura de simetría (issue #4), la tolerancia a fallos (issue #5) y la mano falsa animada (issue #6). Hay tres paquetes en `src/`:
 
 - `swarm_interfaces`: mensajes `HandLandmarks` y `DroneState`.
 - `swarm_drone`: `DroneController` y el nodo `drone_<id>`. El dron densifica el dominio (`src/domain.cpp`) y avanza hacia el centroide de su celda con el último estado conocido de cada vecino, a través de la capa de seguridad. Olvida a los vecinos que no publican en `neighbor_timeout`, proyecta su posición por dead reckoning y señala un `drone_id` duplicado, ante el que el nodo termina con error fatal. Los tests usan el bus falso `test/fake_bus.hpp` y la mano de referencia `test/test_hand.hpp` (10 m, para que quepan 40 drones separados `r_safe`).
-- `swarm_client`: conversión de landmarks, mano falsa estática y la configuración de RViz2.
+- `swarm_client`: conversión de landmarks, mano falsa (estática o animada, abriendo y cerrando el puño; `pixi run fake-hand [static|animated]`) y la configuración de RViz2.
 
-Lo siguiente son las issues #6 a #8 (mano animada, visión y despliegue).
+Lo siguiente son las issues #7 y #8 (visión y despliegue).
 
 ## Despliegue
 
