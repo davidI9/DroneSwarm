@@ -9,13 +9,13 @@ Enjambre de drones simulados sobre ROS 2 / DDS que, sin coordinador central, rep
 
 ## Estado
 
-Hechos el esqueleto de extremo a extremo (issue #2), la cobertura CVT (issue #3) y la capa de seguridad con ruptura de simetría (issue #4). Hay tres paquetes en `src/`:
+Hechos el esqueleto de extremo a extremo (issue #2), la cobertura CVT (issue #3), la capa de seguridad con ruptura de simetría (issue #4) y la tolerancia a fallos (issue #5). Hay tres paquetes en `src/`:
 
 - `swarm_interfaces`: mensajes `HandLandmarks` y `DroneState`.
-- `swarm_drone`: `DroneController` y el nodo `drone_<id>`. El dron densifica el dominio (`src/domain.cpp`) y avanza hacia el centroide de su celda con el último estado conocido de cada vecino, a través de la capa de seguridad. Aún no hay timeout de vecinos, dead reckoning ni detección de id duplicado. Los tests usan el bus falso `test/fake_bus.hpp` y la mano de referencia `test/test_hand.hpp` (10 m, para que quepan 40 drones separados `r_safe`).
+- `swarm_drone`: `DroneController` y el nodo `drone_<id>`. El dron densifica el dominio (`src/domain.cpp`) y avanza hacia el centroide de su celda con el último estado conocido de cada vecino, a través de la capa de seguridad. Olvida a los vecinos que no publican en `neighbor_timeout`, proyecta su posición por dead reckoning y señala un `drone_id` duplicado, ante el que el nodo termina con error fatal. Los tests usan el bus falso `test/fake_bus.hpp` y la mano de referencia `test/test_hand.hpp` (10 m, para que quepan 40 drones separados `r_safe`).
 - `swarm_client`: conversión de landmarks, mano falsa estática y la configuración de RViz2.
 
-Lo siguiente son las issues #5 a #8 (tolerancia a fallos, mano animada, visión y despliegue).
+Lo siguiente son las issues #6 a #8 (mano animada, visión y despliegue).
 
 ## Despliegue
 
@@ -42,7 +42,7 @@ Estas reglas garantizan que dos drones nunca vayan a por el mismo espacio. Cualq
 1. **Densificación determinista**: con los mismos landmarks, todos los drones obtienen exactamente el mismo dominio (huesos + palma).
 2. **Desempate por id**: una muestra a la misma distancia de dos drones pertenece al de `drone_id` menor.
 3. **Ruptura de simetría**: al arrancar, el spawn se desplaza unos centímetros en una dirección determinista derivada del `drone_id`.
-4. **Capa de seguridad**: cada paso queda dentro de la propia celda de Voronoi del espacio completo, encogida `r_safe / 2` a cada lado de cada bisector, de modo que dos drones no bajan de `r_safe`. Un dron que ya está demasiado cerca de un vecino solo puede alejarse de él.
+4. **Capa de seguridad**: cada paso queda dentro de la propia celda de Voronoi del espacio completo, encogida `r_safe / 2` a cada lado de cada bisector, de modo que dos drones no bajan de `r_safe`. Cada vecino aporta el bisector de su última posición recibida y el de su posición proyectada. Un dron que ya está demasiado cerca de un vecino solo puede alejarse de él.
 5. **Celda vacía**: el dron se dirige hacia la muestra más cercana, siempre a través de la capa de seguridad.
 6. **Dron caído**: un vecino que no envía estado en `neighbor_timeout` deja de contar. Se detecta con un timeout en la aplicación, no con las QoS DEADLINE/LIVELINESS.
 7. **Dead reckoning con tiempo de recepción local**: los relojes entre máquinas no están sincronizados.

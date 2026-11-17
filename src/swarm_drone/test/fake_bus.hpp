@@ -28,6 +28,17 @@ public:
     return drone;
   }
 
+  // El dron deja de publicar, como un proceso que muere: los demás no reciben
+  // aviso, solo dejan de llegarles sus estados.
+  void remove_drone(DroneId id)
+  {
+    const auto before = drones_.size();
+    std::erase_if(drones_, [id](const auto & drone) {return drone->state().drone_id == id;});
+    if (drones_.size() == before) {
+      throw std::out_of_range("no hay ningún dron con ese id en el bus");
+    }
+  }
+
   void publish_hand(const Landmarks & hand)
   {
     hand_ = hand;

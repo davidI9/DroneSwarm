@@ -75,7 +75,8 @@ $$D_i \leftarrow D_i - \alpha (D_i - C_i)$$
 
 - Cada dron evalúa solo su propia celda, a partir de las posiciones que conoce de sus vecinos. No hay visión global.
 - Aunque los temporizadores de los drones no estén sincronizados, $E$ actúa como función de Lyapunov y decrece hacia el equilibrio CVT para valores moderados de $\alpha$.
-- **Dead reckoning**: la posición de cada vecino se proyecta al instante actual con su última velocidad conocida, $\hat{D}_j(t) = D_j + v_j \cdot (t - t_{\text{recv}})$, donde $t_{\text{recv}}$ es el instante local de recepción. Así no hace falta que los relojes entre máquinas estén sincronizados.
+- **Dead reckoning**: la posición de cada vecino se proyecta al instante actual con su última velocidad conocida, $\hat{D}_j(t) = D_j + v_j \cdot (t - t_{\text{recv}})$, donde $t_{\text{recv}}$ es el instante local de recepción. Así no hace falta que los relojes entre máquinas estén sincronizados; el `header.stamp` del emisor solo sirve para visualización y depuración.
+- **Dron caído**: un vecino del que no llega estado en `neighbor_timeout` (0.5 s por defecto) deja de contar en el siguiente tick, y los demás absorben su parte de Ω. Se detecta en la aplicación, con el mismo reloj local, y no con las QoS DEADLINE/LIVELINESS.
 
 ### Capa de seguridad
 
@@ -86,6 +87,7 @@ $$s \cdot n_{ij} \le \max\!\left(0,\ \frac{d_{ij} - r_{\text{safe}}}{2}\right)$$
 - **Separación mínima**: si $i$ y $j$ aplican la regla con las mismas posiciones, $(D'_j - D'_i) \cdot n_{ij} \ge r_{\text{safe}}$, así que los dos drones nunca bajan de $r_{\text{safe}}$.
 - **Invasión**: si ya están a menos de $r_{\text{safe}}$, el límite es 0 y solo se permiten componentes que alejan; la distancia entre ellos nunca disminuye.
 - **Solapamiento exacto**: si $d_{ij} = 0$, $n_{ij}$ se toma como $g(j) - g(i)$ normalizado, donde $g$ es la dirección de la espiral áurea del id. Es determinista y opuesta para cada uno de los dos drones.
+- **Vecinos con dead reckoning**: cada vecino aporta dos planos, el de su última posición recibida $D_j$ y el de su posición proyectada $\hat{D}_j(t)$. Un dron simulado solo se mueve en sus ticks, así que $D_j$ es su posición real hasta que vuelva a publicar, y con ella los dos drones aplican la regla sobre las mismas posiciones: es el plano que da la garantía. Usar solo $\hat{D}_j$ rompería la simetría, porque cada dron razonaría con una posición que el otro todavía no ocupa. El plano proyectado solo encoge más la celda y protege si el vecino se mueve como se predice. El reparto de muestras (la celda) usa $\hat{D}_j$.
 - **Recorte**: el paso primero desliza sobre los planos que cruza (unas pocas pasadas de proyección) y después se escala en su propia dirección hasta cumplirlos todos. El paso nulo siempre es válido, así que el escalado existe. Ninguna de las dos operaciones alarga el paso.
 
 **Ruptura de simetría**: al arrancar, el spawn se desplaza 5 cm en la dirección $g(\text{drone\_id})$ de la espiral áurea sobre la esfera, con ángulo $2\pi\,\text{id}/\varphi^2$ (el ángulo áureo) y altura $z = 1 - 2\,\{(\text{id} + \tfrac12)\sqrt2\}$, una secuencia independiente del ángulo para que las direcciones cubran toda la esfera. Como $\sqrt2$ es irracional, dos ids distintos nunca comparten dirección.

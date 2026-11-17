@@ -28,6 +28,10 @@ struct DroneState
   InstanceUuid instance_uuid{};
   Vec3 position;
   Vec3 velocity;
+  // Instante de publicación en el reloj del emisor. Invariante 7: los relojes
+  // entre máquinas no están sincronizados, así que solo sirve para
+  // visualización y depuración; nunca para estimar.
+  double stamp_s = 0.0;
 };
 
 struct DroneConfig
@@ -44,6 +48,9 @@ struct DroneConfig
   // Separación mínima entre dos drones: la capa de seguridad encoge la celda
   // de Voronoi del espacio completo r_safe / 2 a cada lado del bisector.
   double r_safe_m = 0.3;
+  // Invariante 6: un vecino del que no llega estado en este tiempo es un dron
+  // caído y deja de contar.
+  double neighbor_timeout_s = 0.5;
 };
 
 // Toda la lógica de un dron, sin dependencias de ROS. Los instantes son
@@ -61,6 +68,10 @@ public:
 
   const DroneState & state() const {return state_;}
 
+  // Invariante 8: verdadero en cuanto llega estado con el mismo drone_id y
+  // otro uuid de instancia. Quien aloja el controlador debe terminar.
+  bool duplicate_id_detected() const {return duplicate_id_detected_;}
+
 private:
   Vec3 centroid_or_nearest_sample() const;
   Vec3 apply_safety_layer(Vec3 step) const;
@@ -70,10 +81,20 @@ private:
   DroneState state_;
   // Vacío hasta que llega la primera mano; después se conserva la última.
   std::vector<Vec3> domain_;
-  // Última posición conocida de cada vecino. Ordenado por id para que el
+  struct Neighbor
+  {
+    Vec3 position;
+    Vec3 velocity;
+    // Reloj local: el stamp del emisor no sirve para estimar (invariante 7).
+    double received_at_s;
+  };
+  // Último estado conocido de cada vecino. Ordenado por id para que el
   // recorrido sea determinista.
-  std::map<DroneId, Vec3> neighbors_;
+  std::map<DroneId, Neighbor> neighbors_;
+  // Posición estimada de cada vecino vivo en el tick en curso.
+  std::map<DroneId, Vec3> neighbor_positions_;
   std::optional<double> last_tick_s_;
+  bool duplicate_id_detected_ = false;
 };
 
 }  // namespace swarm_drone

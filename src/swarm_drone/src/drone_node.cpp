@@ -123,6 +123,7 @@ private:
     config.v_max_mps = declare_parameter("v_max", config.v_max_mps);
     config.sample_spacing_m = declare_parameter("sample_spacing", config.sample_spacing_m);
     config.r_safe_m = declare_parameter("r_safe", config.r_safe_m);
+    config.neighbor_timeout_s = declare_parameter("neighbor_timeout", config.neighbor_timeout_s);
     const auto x = declare_parameter("spawn_x", rclcpp::PARAMETER_DOUBLE);
     const auto y = declare_parameter("spawn_y", rclcpp::PARAMETER_DOUBLE);
     const auto z = declare_parameter("spawn_z", rclcpp::PARAMETER_DOUBLE);
@@ -154,8 +155,16 @@ private:
     std::copy(msg.instance_uuid.begin(), msg.instance_uuid.end(), state.instance_uuid.begin());
     state.position = to_vec3(msg.position);
     state.velocity = to_vec3(msg.velocity);
+    state.stamp_s = rclcpp::Time(msg.header.stamp).seconds();
     // Invariante 7: el tiempo de recepción es local, no el stamp del emisor.
     controller_.on_neighbor_state(state, steady_now_s());
+    // Invariante 8: la excepción sale de spin y main termina con error fatal.
+    if (controller_.duplicate_id_detected()) {
+      throw std::runtime_error(
+              "drone_id " + std::to_string(msg.drone_id) +
+              " duplicado: otro proceso ya publica estado con este id. "
+              "Lanza este dron con un drone_id libre.");
+    }
   }
 
   void on_tick()

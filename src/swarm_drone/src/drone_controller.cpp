@@ -63,6 +63,9 @@ DroneController::DroneController(const DroneConfig & config, const InstanceUuid 
     throw std::invalid_argument("sample_spacing debe ser > 0");
   }
   if (!(config.r_safe_m >= 0.0)) {throw std::invalid_argument("r_safe debe ser >= 0");}
+  if (!(config.neighbor_timeout_s > 0.0)) {
+    throw std::invalid_argument("neighbor_timeout debe ser > 0");
+  }
   state_.drone_id = config.drone_id;
   state_.instance_uuid = instance_uuid;
   // Invariante 3: ruptura de simetría. Dos drones que nacen en el mismo punto
@@ -76,17 +79,32 @@ void DroneController::on_hand(const Landmarks & hand)
   domain_ = densify_hand(hand, config_.sample_spacing_m);
 }
 
-void DroneController::on_neighbor_state(const DroneState & state, double)
+void DroneController::on_neighbor_state(const DroneState & state, double received_at_s)
 {
-  // El id duplicado se trata en otro ticket; mientras, se ignora.
-  if (state.drone_id == state_.drone_id) {return;}
-  neighbors_[state.drone_id] = state.position;
+  if (state.drone_id == state_.drone_id) {
+    // DDS entrega a un dron sus propias publicaciones: solo otra instancia
+    // con el mismo id es un duplicado.
+    if (state.instance_uuid != state_.instance_uuid) {duplicate_id_detected_ = true;}
+    return;
+  }
+  neighbors_[state.drone_id] = {state.position, state.velocity, received_at_s};
 }
 
 DroneState DroneController::tick(double now_s)
 {
   const double dt = last_tick_s_ ? now_s - *last_tick_s_ : 0.0;
   last_tick_s_ = now_s;
+
+  // Invariante 6: el dron caído deja de contar y el resto absorbe su parte del dominio.
+  std::erase_if(neighbors_, [&](const auto & entry) {
+      return now_s - entry.second.received_at_s > config_.neighbor_timeout_s;
+    });
+  neighbor_positions_.clear();
+  // Invariante 7: dead reckoning desde el instante de recepción local.
+  for (const auto & [id, neighbor] : neighbors_) {
+    const double elapsed = std::max(0.0, now_s - neighbor.received_at_s);
+    neighbor_positions_[id] = neighbor.position + neighbor.velocity * elapsed;
+  }
 
   // Invariante 9: sin mano, el dron se queda quieto en su spawn.
   if (domain_.empty() || dt <= 0.0) {
@@ -110,6 +128,13 @@ DroneState DroneController::tick(double now_s)
 // encogida r_safe / 2 a cada lado de cada bisector. Si el vecino aplica la
 // misma regla con las mismas posiciones, los dos no bajan de r_safe; si ya
 // estaban más cerca, su distancia no disminuye.
+//
+// Cada vecino aporta dos bisectores: el de su última posición recibida y el
+// de su posición proyectada por dead reckoning. Un dron simulado solo se
+// mueve en sus ticks, así que la posición recibida es la que tiene hasta que
+// vuelva a publicar y es la que da la garantía, porque el vecino razona con
+// la nuestra igual. Proyectar solo lo dejaría razonando con posiciones que
+// ninguno de los dos ocupa; el segundo bisector solo encoge más la celda.
 Vec3 DroneController::apply_safety_layer(Vec3 step) const
 {
   struct Plane
@@ -118,21 +143,25 @@ Vec3 DroneController::apply_safety_layer(Vec3 step) const
     double limit;  // Lo máximo que el paso puede avanzar hacia el vecino.
   };
   std::vector<Plane> planes;
-  planes.reserve(neighbors_.size());
+  planes.reserve(2 * neighbors_.size());
   const Vec3 & own = state_.position;
-  for (const auto & [id, position] : neighbors_) {
-    const Vec3 offset = position - own;
-    const double distance = norm(offset);
-    Vec3 normal;
-    if (distance > 0.0) {
-      normal = offset / distance;
-    } else {
-      // Solapados del todo: dirección determinista y opuesta para cada uno.
-      const Vec3 apart = golden_direction(id) - golden_direction(state_.drone_id);
-      normal = apart / norm(apart);
-    }
-    // En invasión (distance < r_safe) el límite es 0: solo puede alejarse.
-    planes.push_back({normal, std::max(0.0, (distance - config_.r_safe_m) / 2.0)});
+  const auto add_plane = [&](DroneId id, const Vec3 & position) {
+      const Vec3 offset = position - own;
+      const double distance = norm(offset);
+      Vec3 normal;
+      if (distance > 0.0) {
+        normal = offset / distance;
+      } else {
+        // Solapados del todo: dirección determinista y opuesta para cada uno.
+        const Vec3 apart = golden_direction(id) - golden_direction(state_.drone_id);
+        normal = apart / norm(apart);
+      }
+      // En invasión (distance < r_safe) el límite es 0: solo puede alejarse.
+      planes.push_back({normal, std::max(0.0, (distance - config_.r_safe_m) / 2.0)});
+    };
+  for (const auto & [id, neighbor] : neighbors_) {
+    add_plane(id, neighbor.position);
+    add_plane(id, neighbor_positions_.at(id));
   }
 
   // Deslizar a lo largo de los planos que el paso cruza, para no quedarse
@@ -159,7 +188,7 @@ Vec3 DroneController::apply_safety_layer(Vec3 step) const
 bool DroneController::owns(const Vec3 & sample) const
 {
   const double own = squared_norm(sample - state_.position);
-  for (const auto & [id, position] : neighbors_) {
+  for (const auto & [id, position] : neighbor_positions_) {
     const double other = squared_norm(sample - position);
     if (other < own || (other == own && id < state_.drone_id)) {return false;}
   }

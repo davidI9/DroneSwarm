@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
+#include <limits>
 
 #include "fake_bus.hpp"
 #include "test_hand.hpp"
@@ -279,4 +281,136 @@ TEST(CapaDeSeguridad, DosDronesExactamenteEnElMismoPuntoSeSeparan)
   expect_separation_kept(bus, 600);
 
   EXPECT_GE(distance(bus.position_of(1), bus.position_of(2)), DroneConfig{}.r_safe_m * (1.0 - 1e-9));
+}
+
+TEST(IdDuplicado, DosControladoresConElMismoIdYDistintaInstanciaLoSenalan)
+{
+  FakeBus bus;
+  auto & first = bus.add_drone(config_for(6));
+  auto & second = bus.add_drone(config_for(6));
+  auto & other = bus.add_drone(config_for(7));
+  EXPECT_FALSE(first.duplicate_id_detected());
+
+  bus.step();
+
+  EXPECT_TRUE(first.duplicate_id_detected());
+  EXPECT_TRUE(second.duplicate_id_detected());
+  EXPECT_FALSE(other.duplicate_id_detected());
+}
+
+TEST(IdDuplicado, ElPropioEstadoDeVueltaNoEsUnDuplicado)
+{
+  FakeBus bus;
+  auto & drone = bus.add_drone(config_for(6));
+  bus.step();
+
+  // DDS entrega a un dron sus propias publicaciones: misma instancia.
+  drone.on_neighbor_state(drone.state(), 0.05);
+
+  EXPECT_FALSE(drone.duplicate_id_detected());
+}
+
+TEST(DronCaido, TrasElTimeoutLosDemasCubrenSuHueco)
+{
+  const auto hand = open_hand();
+  const HandShape shape(hand);
+  FakeBus bus;
+  for (swarm_drone::DroneId id = 0; id < 8; ++id) {bus.add_drone(config_for(id));}
+  bus.publish_hand(hand);
+  bus.run_for(30.0);
+  const Vec3 fallen = bus.position_of(3);
+  const auto nearest_to_fallen = [&] {
+      double best = std::numeric_limits<double>::infinity();
+      for (const auto & p : bus.positions()) {best = std::min(best, distance(p, fallen));}
+      return best;
+    };
+
+  bus.remove_drone(3);
+  const double gap_before = nearest_to_fallen();
+  const double energy_with_gap = shape.coverage_energy(bus.positions());
+  // Dentro del timeout el dron caído sigue contando: nadie se mueve hacia su
+  // hueco.
+  bus.run_for(0.4);
+  EXPECT_NEAR(nearest_to_fallen(), gap_before, 0.05);
+
+  bus.run_for(30.0);
+
+  EXPECT_LT(nearest_to_fallen(), gap_before / 2.0);
+  EXPECT_LT(shape.coverage_energy(bus.positions()), energy_with_gap * 0.9);
+  for (const auto & p : bus.positions()) {EXPECT_LT(shape.distance_to(p), kOnHand_m);}
+}
+
+namespace
+{
+
+// Un dron en la base del dedo corazón que tickea en t = 0, recibe en t = 0
+// el estado de un vecino y vuelve a tickear en t = 0.4 s.
+Vec3 position_after_seeing(const swarm_drone::DroneState & neighbor, double received_at_s)
+{
+  const auto hand = open_hand();
+  auto config = config_for(1);
+  config.spawn = hand[9];
+  swarm_drone::DroneController drone(config, swarm_drone::InstanceUuid{1});
+  drone.on_hand(hand);
+  drone.tick(0.0);
+  drone.on_neighbor_state(neighbor, received_at_s);
+  return drone.tick(0.4).position;
+}
+
+}  // namespace
+
+TEST(DeadReckoning, ElVecinoSeProyectaDesdeElInstanteDeRecepcionLocal)
+{
+  const auto hand = open_hand();
+  // El vecino, en la punta del dedo corazón, baja hacia la base a 2 m/s.
+  const Vec3 tip = hand[12];
+  const Vec3 base = hand[9];
+  const double length = distance(tip, base);
+  const Vec3 velocity{
+    2.0 * (base.x - tip.x) / length, 2.0 * (base.y - tip.y) / length,
+    2.0 * (base.z - tip.z) / length};
+  swarm_drone::DroneState moving{2, swarm_drone::InstanceUuid{2}, tip, velocity, 0.0};
+
+  // Recibido en t = 0, en t = 0.4 s el vecino está 0.8 m más abajo: igual
+  // que si se hubiera recibido allí, parado, en t = 0.4 s.
+  const Vec3 projected = position_after_seeing(moving, 0.0);
+  const Vec3 lower{
+    tip.x + 0.4 * velocity.x, tip.y + 0.4 * velocity.y, tip.z + 0.4 * velocity.z};
+  const Vec3 seen_there = position_after_seeing({2, {2}, lower, {}, 0.0}, 0.4);
+  EXPECT_LT(distance(projected, seen_there), 1e-9);
+
+  // Sin proyectar, el dron habría ido a otro sitio.
+  const Vec3 seen_at_tip = position_after_seeing({2, {2}, tip, {}, 0.0}, 0.0);
+  EXPECT_GT(distance(projected, seen_at_tip), 0.01);
+
+  // El reloj del emisor no cuenta: un stamp desfasado horas no cambia nada.
+  auto skewed = moving;
+  skewed.stamp_s = -7200.0;
+  EXPECT_EQ(distance(position_after_seeing(skewed, 0.0), projected), 0.0);
+  skewed.stamp_s = 7200.0;
+  EXPECT_EQ(distance(position_after_seeing(skewed, 0.0), projected), 0.0);
+}
+
+TEST(DronTardio, SeIntegraEnLaFiguraYElEnjambreVuelveAConverger)
+{
+  const auto hand = open_hand();
+  const HandShape shape(hand);
+  FakeBus bus;
+  for (swarm_drone::DroneId id = 0; id < 8; ++id) {bus.add_drone(config_for(id));}
+  bus.publish_hand(hand);
+  bus.run_for(30.0);
+  const double converged = shape.coverage_energy(bus.positions());
+
+  // Arranca después de que se publicara la mano: el bus se la entrega al
+  // añadirlo, como TRANSIENT_LOCAL.
+  bus.add_drone(config_for(8));
+  expect_separation_kept(bus, 600);
+  const double settling = shape.coverage_energy(bus.positions());
+  bus.run_for(5.0);
+  const double final = shape.coverage_energy(bus.positions());
+
+  // Un dron más cubre mejor la mano y la energía vuelve a estabilizarse.
+  EXPECT_LT(final, converged);
+  EXPECT_NEAR(final, settling, settling * 0.01) << "la energía sigue cambiando";
+  for (const auto & p : bus.positions()) {EXPECT_LT(shape.distance_to(p), kOnHand_m);}
 }
