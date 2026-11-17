@@ -76,3 +76,18 @@ $$D_i \leftarrow D_i - \alpha (D_i - C_i)$$
 - Cada dron evalúa solo su propia celda, a partir de las posiciones que conoce de sus vecinos. No hay visión global.
 - Aunque los temporizadores de los drones no estén sincronizados, $E$ actúa como función de Lyapunov y decrece hacia el equilibrio CVT para valores moderados de $\alpha$.
 - **Dead reckoning**: la posición de cada vecino se proyecta al instante actual con su última velocidad conocida, $\hat{D}_j(t) = D_j + v_j \cdot (t - t_{\text{recv}})$, donde $t_{\text{recv}}$ es el instante local de recepción. Así no hace falta que los relojes entre máquinas estén sincronizados.
+
+### Capa de seguridad
+
+Tras calcular el paso $s$ hacia el centroide (o hacia la muestra más cercana si la celda está vacía) y limitarlo a $v_{\max}\,\Delta t$, el dron $i$ lo confina a su celda de Voronoi del espacio completo, encogida $r_{\text{safe}}/2$ a cada lado de cada bisector. Para cada vecino $j$, con $d_{ij} = \lVert D_j - D_i \rVert$ y $n_{ij} = (D_j - D_i)/d_{ij}$:
+
+$$s \cdot n_{ij} \le \max\!\left(0,\ \frac{d_{ij} - r_{\text{safe}}}{2}\right)$$
+
+- **Separación mínima**: si $i$ y $j$ aplican la regla con las mismas posiciones, $(D'_j - D'_i) \cdot n_{ij} \ge r_{\text{safe}}$, así que los dos drones nunca bajan de $r_{\text{safe}}$.
+- **Invasión**: si ya están a menos de $r_{\text{safe}}$, el límite es 0 y solo se permiten componentes que alejan; la distancia entre ellos nunca disminuye.
+- **Solapamiento exacto**: si $d_{ij} = 0$, $n_{ij}$ se toma como $g(j) - g(i)$ normalizado, donde $g$ es la dirección de la espiral áurea del id. Es determinista y opuesta para cada uno de los dos drones.
+- **Recorte**: el paso primero desliza sobre los planos que cruza (unas pocas pasadas de proyección) y después se escala en su propia dirección hasta cumplirlos todos. El paso nulo siempre es válido, así que el escalado existe. Ninguna de las dos operaciones alarga el paso.
+
+**Ruptura de simetría**: al arrancar, el spawn se desplaza 5 cm en la dirección $g(\text{drone\_id})$ de la espiral áurea sobre la esfera, con ángulo $2\pi\,\text{id}/\varphi^2$ (el ángulo áureo) y altura $z = 1 - 2\,\{(\text{id} + \tfrac12)\sqrt2\}$, una secuencia independiente del ángulo para que las direcciones cubran toda la esfera. Como $\sqrt2$ es irracional, dos ids distintos nunca comparten dirección.
+
+Con $r_{\text{safe}} = 0.3$ m caben pocos drones sobre una mano pequeña: en la mano falsa por defecto (4 m) el enjambre converge a separaciones de unos 0.15 m con 40 drones. Para muchos drones conviene agrandar la mano (parámetro `scale` de la mano falsa). Los tests usan una mano de 10 m.

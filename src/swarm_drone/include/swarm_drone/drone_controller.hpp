@@ -41,6 +41,9 @@ struct DroneConfig
   double v_max_mps = 1.5;
   // Distancia entre muestras al densificar el dominio Ω.
   double sample_spacing_m = 0.02;
+  // Separación mínima entre dos drones: la capa de seguridad encoge la celda
+  // de Voronoi del espacio completo r_safe / 2 a cada lado del bisector.
+  double r_safe_m = 0.3;
 };
 
 // Toda la lógica de un dron, sin dependencias de ROS. Los instantes son
@@ -60,6 +63,7 @@ public:
 
 private:
   Vec3 centroid_or_nearest_sample() const;
+  Vec3 apply_safety_layer(Vec3 step) const;
   bool owns(const Vec3 & sample) const;
 
   DroneConfig config_;

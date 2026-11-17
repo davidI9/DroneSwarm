@@ -122,6 +122,7 @@ private:
     config.alpha = declare_parameter("alpha", config.alpha);
     config.v_max_mps = declare_parameter("v_max", config.v_max_mps);
     config.sample_spacing_m = declare_parameter("sample_spacing", config.sample_spacing_m);
+    config.r_safe_m = declare_parameter("r_safe", config.r_safe_m);
     const auto x = declare_parameter("spawn_x", rclcpp::PARAMETER_DOUBLE);
     const auto y = declare_parameter("spawn_y", rclcpp::PARAMETER_DOUBLE);
     const auto z = declare_parameter("spawn_z", rclcpp::PARAMETER_DOUBLE);

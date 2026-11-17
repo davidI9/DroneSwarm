@@ -10,8 +10,14 @@
 namespace swarm_drone::testing
 {
 
+// Los tests trabajan con una mano grande: con r_safe = 0.3 m, en la mano de
+// 4 m de la mano falsa no caben 40 drones separados.
+constexpr double kHandScale_m = 10.0;
+constexpr double kHandHeight_m = 5.0;
+
 // Mano abierta de la mano falsa del cliente (OPEN_HAND) convertida a metros
-// con escala 4 m y altura 2.5 m: x → Y, y → −Z y profundidad → X.
+// con escala kHandScale_m y altura kHandHeight_m: x → Y, y → −Z y
+// profundidad → X.
 inline Landmarks open_hand()
 {
   constexpr double kNormalized[21][3] = {
@@ -22,12 +28,11 @@ inline Landmarks open_hand()
     {0.56, 0.58, -0.01}, {0.57, 0.46, -0.02}, {0.58, 0.38, -0.03}, {0.58, 0.31, -0.03},
     {0.61, 0.62, -0.01}, {0.63, 0.53, -0.02}, {0.64, 0.47, -0.03}, {0.65, 0.41, -0.03},
   };
-  constexpr double kScale = 4.0;
-  constexpr double kHeight = 2.5;
   Landmarks hand;
   for (std::size_t i = 0; i < hand.size(); ++i) {
     const auto [x, y, z] = kNormalized[i];
-    hand[i] = {z * kScale, (x - 0.5) * kScale, kHeight - (y - 0.5) * kScale};
+    hand[i] = {
+      z * kHandScale_m, (x - 0.5) * kHandScale_m, kHandHeight_m - (y - 0.5) * kHandScale_m};
   }
   return hand;
 }
