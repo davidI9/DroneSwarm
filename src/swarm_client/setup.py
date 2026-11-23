@@ -15,12 +15,13 @@ setup(
     zip_safe=True,
     maintainer='david',
     maintainer_email='david@todo.todo',
-    description='Cliente del enjambre: conversión de landmarks, mano falsa y marcadores',
+    description='Cliente del enjambre: conversión de landmarks, mano falsa y vista del enjambre',
     license='Apache-2.0',
     extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'fake_hand = swarm_client.fake_hand:main',
+            'swarm_view = swarm_client.swarm_view:main',
         ],
     },
 )

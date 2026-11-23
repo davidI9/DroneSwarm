@@ -17,7 +17,6 @@
 #include "swarm_drone/drone_controller.hpp"
 #include "swarm_interfaces/msg/drone_state.hpp"
 #include "swarm_interfaces/msg/hand_landmarks.hpp"
-#include "visualization_msgs/msg/marker_array.hpp"
 
 namespace swarm_drone
 {
@@ -96,8 +95,6 @@ public:
 
     state_pub_ = create_publisher<swarm_interfaces::msg::DroneState>(
       "/swarm/state", kSwarmStateQos);
-    marker_pub_ = create_publisher<visualization_msgs::msg::MarkerArray>(
-      "/swarm/markers", rclcpp::QoS(10));
 
     hand_sub_ = create_subscription<swarm_interfaces::msg::HandLandmarks>(
       "/hand/landmarks", rclcpp::QoS(rclcpp::KeepLast(1)).reliable().transient_local(),
@@ -170,58 +167,19 @@ private:
   void on_tick()
   {
     const auto state = controller_.tick(steady_now_s());
-    const auto stamp = now();
 
     swarm_interfaces::msg::DroneState msg;
-    msg.header.stamp = stamp;
+    msg.header.stamp = now();
     msg.header.frame_id = kFrameId;
     msg.drone_id = state.drone_id;
     std::copy(state.instance_uuid.begin(), state.instance_uuid.end(), msg.instance_uuid.begin());
     msg.position = to_point(state.position);
     msg.velocity = to_vector3(state.velocity);
     state_pub_->publish(msg);
-
-    marker_pub_->publish(make_markers(state, stamp));
-  }
-
-  static visualization_msgs::msg::MarkerArray make_markers(
-    const DroneState & state, const rclcpp::Time & stamp)
-  {
-    using visualization_msgs::msg::Marker;
-    Marker sphere;
-    sphere.header.frame_id = kFrameId;
-    sphere.header.stamp = stamp;
-    sphere.ns = "drones";
-    sphere.id = static_cast<int>(state.drone_id);
-    sphere.type = Marker::SPHERE;
-    sphere.action = Marker::ADD;
-    sphere.pose.position = to_point(state.position);
-    sphere.pose.orientation.w = 1.0;
-    sphere.scale.x = sphere.scale.y = sphere.scale.z = 0.3;
-    sphere.color.r = 0.1f;
-    sphere.color.g = 0.8f;
-    sphere.color.b = 0.2f;
-    sphere.color.a = 1.0f;
-    // Si el dron cae, su esfera desaparece de RViz2 poco después.
-    sphere.lifetime = rclcpp::Duration::from_seconds(1.0);
-
-    Marker label = sphere;
-    label.ns = "drone_ids";
-    label.type = Marker::TEXT_VIEW_FACING;
-    label.text = std::to_string(state.drone_id);
-    label.pose.position.z += 0.35;
-    label.scale.x = label.scale.y = 0.0;
-    label.scale.z = 0.25;
-    label.color.r = label.color.g = label.color.b = 1.0f;
-
-    visualization_msgs::msg::MarkerArray markers;
-    markers.markers = {sphere, label};
-    return markers;
   }
 
   DroneController controller_;
   rclcpp::Publisher<swarm_interfaces::msg::DroneState>::SharedPtr state_pub_;
-  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_pub_;
   rclcpp::Subscription<swarm_interfaces::msg::HandLandmarks>::SharedPtr hand_sub_;
   rclcpp::Subscription<swarm_interfaces::msg::DroneState>::SharedPtr state_sub_;
   rclcpp::TimerBase::SharedPtr timer_;

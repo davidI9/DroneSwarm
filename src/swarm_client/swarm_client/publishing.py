@@ -1,10 +1,13 @@
-"""Publicación de la mano, compartida por la visión y la mano falsa."""
+"""Publicación del cliente: la mano (visión y mano falsa) y la vista del enjambre.
+
+El módulo no importa rclpy al cargarse, para que la vista del enjambre se pueda
+usar y probar sin él; solo `HandPublisher`, que necesita un nodo, lo carga.
+"""
 
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from geometry_msgs.msg import Point
-from rclpy.node import Node
-from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from swarm_interfaces.msg import HandLandmarks
 from visualization_msgs.msg import Marker, MarkerArray
 
@@ -13,20 +16,24 @@ from swarm_client.hand import HAND_CONNECTIONS
 
 FRAME_ID = 'map'
 
-# Fiable y persistente: un dron que arranca tarde recibe la última mano.
-LANDMARKS_QOS = QoSProfile(
-    depth=1,
-    reliability=ReliabilityPolicy.RELIABLE,
-    durability=DurabilityPolicy.TRANSIENT_LOCAL,
-)
+if TYPE_CHECKING:
+    from rclpy.node import Node
 
 
 class HandPublisher:
     """Publica `/hand/landmarks` y la mano objetivo en `/hand/markers`."""
 
-    def __init__(self, node: Node):
+    def __init__(self, node: 'Node'):
+        from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
+
+        # Fiable y persistente: un dron que arranca tarde recibe la última mano.
+        landmarks_qos = QoSProfile(
+            depth=1,
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+        )
         self._node = node
-        self._landmarks_pub = node.create_publisher(HandLandmarks, '/hand/landmarks', LANDMARKS_QOS)
+        self._landmarks_pub = node.create_publisher(HandLandmarks, '/hand/landmarks', landmarks_qos)
         self._markers_pub = node.create_publisher(MarkerArray, '/hand/markers', 10)
 
     def publish(self, world_points: Sequence[WorldPoint]) -> None:
@@ -67,3 +74,46 @@ def _hand_markers(points: list[Point], stamp) -> MarkerArray:
     bones.points = [points[i] for bone in HAND_CONNECTIONS for i in bone]
 
     return MarkerArray(markers=[landmarks_marker, bones])
+
+
+def swarm_markers(drones: Sequence[tuple[int, WorldPoint]]) -> MarkerArray:
+    """Markers de la vista del enjambre para `/swarm/markers`, sin marca de tiempo.
+
+    Un `DELETEALL` que borra lo anterior (incluidas las etiquetas de los drones
+    caídos), una `SPHERE_LIST` con todos los drones y una etiqueta por dron, en el
+    orden de `drones`. Ninguno lleva tiempo de vida: quitar a los caídos es trabajo
+    de la vista, no de RViz2.
+    """
+    delete_all = Marker()
+    delete_all.header.frame_id = FRAME_ID
+    delete_all.action = Marker.DELETEALL
+    if not drones:
+        return MarkerArray(markers=[delete_all])
+
+    spheres = Marker()
+    spheres.header.frame_id = FRAME_ID
+    spheres.ns = 'drones'
+    spheres.id = 0
+    spheres.type = Marker.SPHERE_LIST
+    spheres.action = Marker.ADD
+    spheres.pose.orientation.w = 1.0
+    spheres.scale.x = spheres.scale.y = spheres.scale.z = 0.3
+    spheres.color.r, spheres.color.g, spheres.color.b, spheres.color.a = 0.1, 0.8, 0.2, 1.0
+    spheres.points = [Point(x=x, y=y, z=z) for _, (x, y, z) in drones]
+
+    labels = []
+    for drone_id, (x, y, z) in drones:
+        label = Marker()
+        label.header.frame_id = FRAME_ID
+        label.ns = 'drone_ids'
+        label.id = drone_id
+        label.type = Marker.TEXT_VIEW_FACING
+        label.action = Marker.ADD
+        label.text = str(drone_id)
+        label.pose.position = Point(x=x, y=y, z=z + 0.35)
+        label.pose.orientation.w = 1.0
+        label.scale.z = 0.25
+        label.color.r, label.color.g, label.color.b, label.color.a = 1.0, 1.0, 1.0, 1.0
+        labels.append(label)
+
+    return MarkerArray(markers=[delete_all, spheres, *labels])

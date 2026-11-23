@@ -3,7 +3,7 @@
 <package format="3">
   <name>swarm_client</name>
   <version>0.1.0</version>
-  <description>Cliente del enjambre: conversión de landmarks, mano falsa y marcadores</description>
+  <description>Cliente del enjambre: conversión de landmarks, mano falsa y vista del enjambre</description>
   <maintainer email="david@todo.todo">david</maintainer>
   <license>Apache-2.0</license>
 

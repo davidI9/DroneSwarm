@@ -15,7 +15,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(visualization_msgs REQUIRED)
 find_package(swarm_interfaces REQUIRED)
 
 # Lógica del dron, sin dependencias de ROS.
@@ -29,7 +28,6 @@ target_link_libraries(drone
   drone_controller
   rclcpp::rclcpp
   ${geometry_msgs_TARGETS}
-  ${visualization_msgs_TARGETS}
   ${swarm_interfaces_TARGETS})
 
 install(TARGETS drone DESTINATION lib/${PROJECT_NAME})
