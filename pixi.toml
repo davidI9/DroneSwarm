@@ -15,6 +15,9 @@ drone = { cmd = "ros2 run swarm_drone drone --ros-args -p drone_id:={{ id }} {{ 
 # pixi run fake-hand animated "-p period:=6.0"
 fake-hand = { cmd = "ros2 run swarm_client fake_hand --ros-args -p mode:={{ mode }} {{ params }}", args = [{ arg = "mode", default = "static" }, { arg = "params", default = "" }] }
 rviz = "rviz2 -d src/swarm_client/config/swarm.rviz"
+# RViz2 en sistemas con un Mesa más nuevo que el del entorno (p. ej. Arch): el Mesa
+# del sistema necesita la libdrm del sistema, no la del entorno pixi.
+rviz-arch = { cmd = "rviz2 -d src/swarm_client/config/swarm.rviz", env = { QT_QPA_PLATFORM = "xcb", LD_PRELOAD = "/usr/lib/libdrm.so.2 /usr/lib/libdrm_amdgpu.so.1" } }
 
 [dependencies]
 ros-lyrical-desktop = ">=0.13.0,<0.14"
