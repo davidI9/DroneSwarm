@@ -466,6 +466,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/noarch/wslink-2.6.0-pyhd8ed1ab_0.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-ament-cmake-auto-2.8.8-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-desktop-0.13.0-hb0f4dca_30.conda
+      - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-rmw-zenoh-cpp-0.10.6-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-rviz2-15.2.6-hb0f4dca_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-msgs-2.4.5-np2py314h53a0733_30.conda
       - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros2-action-tutorials-cpp-0.37.9-np2py314h53a0733_30.conda
@@ -7513,6 +7514,14 @@ packages:
   - ros2-distro-mutex 0.22.* lyrical_*
   size: 2050
   timestamp: 1792768515166
+- conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-rmw-zenoh-cpp-0.10.6-hb0f4dca_30.conda
+  sha256: 06daa22692c9ca988a523e4b129eeb3da0b8ebcf48effc718410e609aa65df6e
+  md5: f9191f0909ceae6ee84eaa71fdf014bc
+  depends:
+  - ros2-rmw-zenoh-cpp ==0.10.6
+  - ros2-distro-mutex 0.22.* lyrical_*
+  size: 2078
+  timestamp: 1792755512178
 - conda: https://conda.anaconda.org/robostack-lyrical/linux-64/ros-lyrical-rviz2-15.2.6-hb0f4dca_30.conda
   sha256: d66e680d7fe852e2d2ab983fe4f8be659b8b6221287b920637cfa9357f157aa1
   md5: 8a2d7cb6a1b6e6013a7b18f4ca9793ea

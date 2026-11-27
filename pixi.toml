@@ -17,6 +17,8 @@ fake-hand = { cmd = "ros2 run swarm_client fake_hand --ros-args -p mode:={{ mode
 # pixi run swarm-view
 # pixi run swarm-view "-p drone_timeout:=1.0 -p rate_hz:=20.0"
 swarm-view = { cmd = "ros2 run swarm_client swarm_view --ros-args {{ params }}", args = [{ arg = "params", default = "" }] }
+# pixi run router   (router de Zenoh, en su propia terminal antes que los demás procesos)
+router = "ros2 run rmw_zenoh_cpp rmw_zenohd"
 rviz = "rviz2 -d src/swarm_client/config/swarm.rviz"
 # RViz2 en sistemas con un Mesa más nuevo que el del entorno (p. ej. Arch): el Mesa
 # del sistema necesita la libdrm del sistema, no la del entorno pixi.
@@ -31,6 +33,10 @@ pkg-config = ">=0.29.2,<0.30"
 cmake = "<4"
 ninja = ">=1.13.2,<2"
 ros-lyrical-rviz2 = ">=15.2.6,<16"
+ros-lyrical-rmw-zenoh-cpp = ">=0.10.6,<0.11"
 
 [activation]
 scripts = ["install/setup.sh"]
+
+[activation.env]
+RMW_IMPLEMENTATION = "rmw_zenoh_cpp"
