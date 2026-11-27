@@ -1,9 +1,10 @@
 # DroneSwarm
 
-Enjambre de drones simulados sobre ROS 2 / DDS que, sin coordinador central, replica en tiempo real la forma de una mano capturada por la cámara del cliente. Cada dron se mueve por descenso de gradiente sobre una teselación de Voronoi centroidal (CVT). Es un proyecto para la asignatura de servicios distribuidos.
+Enjambre de drones simulados sobre ROS 2 que, sin coordinador central, replica en tiempo real la forma de una mano capturada por la cámara del cliente. Cada dron se mueve por descenso de gradiente sobre una teselación de Voronoi centroidal (CVT). Es un proyecto para la asignatura de servicios distribuidos.
 
 - Vocabulario: `GLOSSARY.md`. Escribe código, issues y docs con esos términos.
-- Teoría (red DDS/VXLAN, CVT, fórmulas): `docs/teoria.md`.
+- Teoría (red con Zenoh, CVT, fórmulas): `docs/teoria.md`.
+- Cómo levantar cada máquina: `README.md`.
 - Decisiones de arquitectura: `docs/adr/`.
 - Spec de implementación: issue #1 en GitHub.
 
@@ -15,16 +16,22 @@ Hechos el esqueleto de extremo a extremo (issue #2), la cobertura CVT (issue #3)
 - `swarm_drone`: `DroneController` y el nodo `drone_<id>`. El dron densifica el dominio (`src/domain.cpp`) y avanza hacia el centroide de su celda con el último estado conocido de cada vecino, a través de la capa de seguridad. Olvida a los vecinos que no publican en `neighbor_timeout`, proyecta su posición por dead reckoning y señala un `drone_id` duplicado, ante el que el nodo termina con error fatal. El nodo solo publica su estado, sin markers. Los tests usan el bus falso `test/fake_bus.hpp` y la mano de referencia `test/test_hand.hpp` (10 m, para que quepan 40 drones separados `r_safe`).
 - `swarm_client`: conversión de landmarks, mano falsa (estática o animada, abriendo y cerrando el puño; `pixi run fake-hand [static|animated]`), vista del enjambre (`SwarmView`, sin rclpy, y el nodo `swarm_view`; `pixi run swarm-view`) y la configuración de RViz2.
 
-Lo siguiente son las issues #7 y #8 (visión y despliegue).
+Esta es la rama `zenoh-version` (issue #12): sale de `main` y convive con ella sin fusionarse, para comparar Zenoh con routers sobre Tailscale frente a DDS sobre VXLAN, que sigue en `main`. Cambia la red; los topics, `DroneController`, la vista del enjambre y la mano falsa son los mismos. La configuración de red está en `scripts/zenoh_config.py`, con sus tests en `scripts/test/` (`pixi run test-config`).
+
+Lo siguiente es la issue #7 (visión). La #8 (perfil de Fast DDS) solo aplica a `main`.
 
 ## Despliegue
 
 - **Cliente** (portátil): nodo de visión (OpenCV + MediaPipe) o mano falsa, la vista del enjambre y RViz2.
 - **Servidor** (ordenador de torre): varias **VMs**, cada una con uno o varios drones. Cada dron es un proceso lanzado a mano en su propia terminal con `pixi run …` y su `drone_id` como parámetro. Sin contenedores ni orquestador.
-- La red de capa 2 (VXLAN) que une cliente y VMs la monta y la mantiene el usuario como parte de la asignatura. El código solo aporta un perfil de Fast DDS de ejemplo, opcional, para fijar la interfaz `vxlan0`.
-- Middleware: Fast DDS (RMW por defecto de ROS 2).
+- Middleware: `rmw_zenoh_cpp`, fijado con `RMW_IMPLEMENTATION` en el entorno de activación de pixi para todas las tareas. No hay perfil de Fast DDS.
+- **Routers**: uno en el cliente y otro en el host del servidor, cada uno lanzado a mano con `pixi run router` en su propia terminal, antes que los demás procesos. El del host solo escucha en TCP 7447; el del cliente se conecta a él por la IP de Tailscale de la torre. Las VMs no tienen router ni Tailscale.
+- **Sesiones**: en el cliente y en el host van en modo peer contra el router local; en las VMs, en modo client contra el router del host, por la red interna de las VMs.
+- **`.env` por máquina**: cada máquina copia `.env.example` a `.env` (no versionada) y fija su `ROL` (`cliente`, `torre` o `vm`) y las IPs que necesita (`TORRE_TAILSCALE_IP`, `TORRE_IP_VMS`). `scripts/zenoh_config.py` construye con ella `ZENOH_CONFIG_OVERRIDE`; las tareas de pixi lo llaman, y `pixi run zenoh-config` muestra el resultado sin lanzar nada.
+- Tailscale, la red interna de las VMs y el firewall del host (TCP 7447 abierto en la interfaz de Tailscale y en la de las VMs) los monta el usuario; el código no los configura.
+- **Fallos**: si cae una VM, sus drones pasan a drones caídos. Si cae el proceso del router del host, todo el servidor queda aislado: es el único punto de fallo de la topología (`docs/teoria.md`).
 
-## Contrato DDS
+## Contrato de topics
 
 | Topic | Contenido | QoS |
 |---|---|---|

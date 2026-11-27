@@ -1,23 +1,63 @@
 # Fundamentos teóricos
 
-Este documento recoge la base teórica del proyecto: la red (DDS/RTPS sobre VXLAN) y el control de cobertura (descenso de gradiente sobre una teselación de Voronoi centroidal). Las decisiones concretas de implementación están en `CLAUDE.md`, en `docs/adr/` y en la issue #1.
+Este documento recoge la base teórica del proyecto: la red (ROS 2 sobre Zenoh, con un router en cada extremo) y el control de cobertura (descenso de gradiente sobre una teselación de Voronoi centroidal). Las decisiones concretas de implementación están en `CLAUDE.md`, en `docs/adr/` y en la issue #1.
 
-## 1. Red y middleware: DDS / RTPS sobre VXLAN
+## 1. Red y middleware: Zenoh con routers sobre Tailscale
 
-### Descubrimiento RTPS
+### El problema: descubrimiento en una WAN de capa 3
 
-El sistema usa implementaciones RMW abiertas estándar de ROS 2 (`rmw_fastrtps_cpp` o `rmw_cyclonedds_cpp`), sin dependencias propietarias. El protocolo DDSI-RTPS funciona en dos fases:
+El cliente (portátil) y el servidor (torre) no están en la misma LAN: el portátil se conecta desde cualquier red y llega a la torre por internet, a través de Tailscale. Tailscale es una VPN de capa 3: transporta paquetes IP unicast entre las máquinas del tailnet, pero no tramas Ethernet ni multicast.
 
-- **Descubrimiento (SPDP, Simple Participant Discovery Protocol)**: al arrancar, cada participante envía periódicamente paquetes a una dirección UDP multicast (`239.255.0.1`, en puertos calculados a partir de `7400 + 250 · ROS_DOMAIN_ID`) para anunciar su presencia, su IP y sus puertos de escucha.
-- **Intercambio de datos (SEDP y datos de usuario)**: una vez que dos participantes se descubren, intercambian sus descriptores de endpoints y se comunican directamente punto a punto por UDP unicast.
+El RMW por defecto de ROS 2 (DDS) descubre a los demás participantes enviando anuncios a una dirección UDP multicast. Ese multicast no atraviesa una red de capa 3, así que, sin más, los procesos del cliente y los del servidor nunca se verían.
 
-### Por qué una red de capa 2 (VXLAN)
+### Zenoh en ROS 2 (`rmw_zenoh_cpp`)
 
-En redes WAN, VPNs de capa 3 o redes aisladas, el multicast de SPDP se descarta y el autodescubrimiento no funciona. La alternativa habitual es un servidor de descubrimiento central, pero se descarta porque convierte ese servidor en un punto único de fallo (SPOF). En su lugar se monta una red overlay de capa 2:
+`rmw_zenoh_cpp` es una implementación RMW de ROS 2 sobre el protocolo Zenoh. Los nodos, los topics, los mensajes y las QoS no cambian: es el mismo contrato de topics, con otro transporte debajo. Sus piezas son:
 
-- **Túnel VXLAN** (nativo del kernel Linux): encapsula tramas Ethernet completas en datagramas UDP a través de un único puerto (UDP 4789). Emula un switch virtual compartido entre el cliente y todas las VMs del servidor.
-- **Transparencia**: el multicast de SPDP atraviesa `vxlan0` de forma nativa, así que no hace falta cambiar nada en ROS 2.
-- **Seguridad (opcional)**: las interfaces VXLAN pueden ir sobre un túnel WireGuard para cifrar el tráfico manteniendo un único puerto expuesto.
+- **Sesión**: cada proceso ROS abre una sesión de Zenoh, por la que publica y se suscribe. Una sesión tiene un modo:
+  - **peer**: la sesión se conecta al router local para descubrir a los demás y, una vez descubiertos, puede hablar directamente con otras sesiones peer de su misma máquina.
+  - **client**: la sesión solo habla con un router. Todo su tráfico, incluido el que va a otras sesiones de la misma máquina, pasa por él.
+- **Router** (`rmw_zenohd`, `pixi run router`): proceso que enlaza las sesiones de su máquina (y, en el servidor, las de sus VMs) con las del otro extremo. Mantiene la tabla de quién publica y quién se suscribe a cada topic y reenvía los datos a quien los necesita.
+- **Enlace entre routers**: un router puede conectarse a otro por un endpoint explícito, como `tcp/<ip>:7447`. Los dos routers se intercambian lo que saben de sus sesiones, y los datos de un extremo llegan al otro por ese único enlace.
+
+El descubrimiento ya no depende del multicast: cada sesión conoce de antemano el endpoint de su router, y cada router conoce el del otro extremo. Todo viaja por conexiones TCP unicast, que es justo lo que Tailscale transporta.
+
+### Topología del proyecto
+
+```
+  Cliente (portátil)                      Servidor (torre, host)
+ ┌─────────────────────┐                 ┌──────────────────────────┐
+ │ mano falsa ┐        │                 │                          │
+ │ vista      ├─ peer ─┤                 │      router del host     │
+ │ RViz2      ┘        │   Tailscale     │   (escucha en TCP 7447)  │
+ │   router del cliente├──── TCP 7447 ──►│                          │
+ └─────────────────────┘                 └──────▲────────────▲──────┘
+                                                │ client     │ client
+                                    red interna │            │
+                                        de VMs  │            │
+                                         ┌──────┴──┐    ┌────┴────┐
+                                         │  VM 1   │    │  VM 2   │
+                                         │ drones  │    │ drones  │
+                                         └─────────┘    └─────────┘
+```
+
+- Hay un router en el cliente y otro en el host del servidor. Las VMs no tienen router ni Tailscale.
+- El router del servidor solo escucha, en TCP 7447 en todas las interfaces. El del cliente se conecta a la IP de Tailscale de la torre. Así el servidor no necesita la IP del portátil, que cambia con la red, ni el portátil necesita aceptar conexiones entrantes detrás de un NAT.
+- Solo hay un enlace entre los dos extremos, y va sobre TCP sin cifrado propio, porque el cifrado ya lo pone Tailscale.
+- En el cliente (y en el host, si ejecuta nodos), las sesiones van en modo peer contra el router local.
+- En las VMs, las sesiones de los drones van en modo client contra el router del host, a través de la red interna del hipervisor. En modo client un dron nunca intenta conexiones directas con el portátil, que fallarían, porque no es alcanzable desde las VMs.
+
+El papel de cada máquina y las IPs se escriben en una `.env` local, y `scripts/zenoh_config.py` construye con ella la configuración del router y de las sesiones (ver el `README`).
+
+### Por qué no hay un punto único de fallo nuevo
+
+En una red DDS sin multicast, la alternativa habitual es un servidor de descubrimiento central, que se descarta porque convierte ese servidor en un punto único de fallo para todo el sistema. Ese argumento no aplica aquí: no hay un router central, sino uno por extremo.
+
+- **Si cae una VM**, sus drones dejan de publicar estado y el resto del enjambre los trata como drones caídos (`neighbor_timeout`) y absorbe su parte del dominio. Es la misma tolerancia a fallos de siempre, en la aplicación.
+- **Si cae el router del cliente**, el cliente se queda sin ver el enjambre, pero los drones siguen viéndose entre ellos a través del router del host y mantienen la última mano (invariante 9).
+- **Si cae el proceso del router del host**, todo el servidor queda aislado. Como las sesiones de las VMs van en modo client, todo su tráfico pasaba por ese router, incluido el de dos drones de la misma VM: ningún dron recibe ya el estado de ningún vecino. Cada uno los da por drones caídos, cree estar solo y se dirige al centroide de toda la mano con la última que conoce; la capa de seguridad no puede separar drones de los que no sabe nada. En el cliente, la vista del enjambre se queda vacía.
+
+El router del host es, por tanto, el único punto de fallo de la topología. Se acepta porque no añade un riesgo nuevo: el host ya es un punto de fallo compartido por todas sus VMs, y si cae el host caen también ellas.
 
 ## 2. Descenso de gradiente en el espacio de posiciones
 
