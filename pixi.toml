@@ -6,23 +6,29 @@ version = "0.1.0"
 
 [tasks]
 build = "colcon build --symlink-install"
-test = { cmd = "colcon test --event-handlers console_direct+ && colcon test-result --verbose", depends-on = ["build"] }
+test = { cmd = "colcon test --event-handlers console_direct+ && colcon test-result --verbose", depends-on = ["build", "test-config"] }
+# Tests de la configuración de Zenoh a partir de la .env (sin ROS)
+test-config = "python -m pytest -q scripts/test"
+# Configuración de Zenoh resuelta de la .env, sin lanzar nada
+zenoh-config = "python scripts/zenoh_config.py show"
+# Las tareas de nodos y el router aplican la configuración de Zenoh de su ROL (.env).
 # pixi run drone 3
 # pixi run drone 3 "-p spawn_x:=1.0 -p spawn_y:=0.0 -p spawn_z:=1.0"
-drone = { cmd = "ros2 run swarm_drone drone --ros-args -p drone_id:={{ id }} {{ params }}", args = ["id", { arg = "params", default = "" }] }
+drone = { cmd = "python scripts/zenoh_config.py exec session -- ros2 run swarm_drone drone --ros-args -p drone_id:={{ id }} {{ params }}", args = ["id", { arg = "params", default = "" }] }
 # pixi run fake-hand            (estática)
 # pixi run fake-hand animated   (abre y cierra el puño en bucle)
 # pixi run fake-hand animated "-p period:=6.0"
-fake-hand = { cmd = "ros2 run swarm_client fake_hand --ros-args -p mode:={{ mode }} {{ params }}", args = [{ arg = "mode", default = "static" }, { arg = "params", default = "" }] }
+fake-hand = { cmd = "python scripts/zenoh_config.py exec session -- ros2 run swarm_client fake_hand --ros-args -p mode:={{ mode }} {{ params }}", args = [{ arg = "mode", default = "static" }, { arg = "params", default = "" }] }
 # pixi run swarm-view
 # pixi run swarm-view "-p drone_timeout:=1.0 -p rate_hz:=20.0"
-swarm-view = { cmd = "ros2 run swarm_client swarm_view --ros-args {{ params }}", args = [{ arg = "params", default = "" }] }
-# pixi run router   (router de Zenoh, en su propia terminal antes que los demás procesos)
-router = "ros2 run rmw_zenoh_cpp rmw_zenohd"
-rviz = "rviz2 -d src/swarm_client/config/swarm.rviz"
+swarm-view = { cmd = "python scripts/zenoh_config.py exec session -- ros2 run swarm_client swarm_view --ros-args {{ params }}", args = [{ arg = "params", default = "" }] }
+# pixi run router   (router de Zenoh, en su propia terminal antes que los demás procesos;
+#                    con ROL=vm se niega a arrancar, porque en una VM no hay router)
+router = "python scripts/zenoh_config.py exec router -- ros2 run rmw_zenoh_cpp rmw_zenohd"
+rviz = "python scripts/zenoh_config.py exec session -- rviz2 -d src/swarm_client/config/swarm.rviz"
 # RViz2 en sistemas con un Mesa más nuevo que el del entorno (p. ej. Arch): el Mesa
 # del sistema necesita la libdrm del sistema, no la del entorno pixi.
-rviz-arch = { cmd = "rviz2 -d src/swarm_client/config/swarm.rviz", env = { QT_QPA_PLATFORM = "xcb", LD_PRELOAD = "/usr/lib/libdrm.so.2 /usr/lib/libdrm_amdgpu.so.1" } }
+rviz-arch = { cmd = "python scripts/zenoh_config.py exec session -- rviz2 -d src/swarm_client/config/swarm.rviz", env = { QT_QPA_PLATFORM = "xcb", LD_PRELOAD = "/usr/lib/libdrm.so.2 /usr/lib/libdrm_amdgpu.so.1" } }
 
 [dependencies]
 ros-lyrical-desktop = ">=0.13.0,<0.14"

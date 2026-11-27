@@ -13,3 +13,6 @@ log/
 # Python
 __pycache__/
 .pytest_cache/
+
+# Configuración de red local de cada máquina (plantilla en .env.example)
+.env
