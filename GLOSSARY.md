@@ -18,6 +18,10 @@ _Evitar_: backend, clúster
 Máquina virtual del servidor que ejecuta uno o varios drones, cada uno en su propio proceso.
 _Evitar_: instancia, contenedor, pod
 
+**Router**:
+Proceso que, en el cliente y en el servidor, enlaza los procesos de su máquina (y de sus VMs) con los del otro extremo.
+_Evitar_: enrutador, broker, servidor de descubrimiento
+
 **Vista del enjambre**:
 La representación del enjambre que el cliente muestra al usuario, construida con el estado que publican los drones; en ella solo aparecen los drones que no están caídos.
 _Evitar_: markers del enjambre, markers de los drones
